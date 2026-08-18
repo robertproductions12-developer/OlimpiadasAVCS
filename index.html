@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>OLIMPIADAS 2026 AVCS</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+    <style>
+        /* ===== RESET Y ESTILOS GENERALES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2e7d32;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4caf50;
+        }
+
+        /* ===== NAVEGACIÓN ===== */
+        nav {
+            background: rgba(10, 10, 10, 0.95);
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #2e7d32;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 2px;
+        }
+        .logo i {
+            color: #4caf50;
+            margin-right: 8px;
+        }
+        .logo span {
+            color: #4caf50;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #cccccc;
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s, border-color 0.3s;
+            padding: 0.4rem 0.2rem;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #4caf50;
+            border-bottom-color: #4caf50;
+        }
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            color: #4caf50;
+            cursor: pointer;
+        }
+
+        @media (max-width: 720px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+                padding: 1rem 0;
+                border-top: 1px solid #333;
+                margin-top: 0.8rem;
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            nav {
+                padding: 0.8rem 1.2rem;
+            }
+            .logo {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* ===== CONTENEDOR PRINCIPAL ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* ===== SLIDER ===== */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(46, 125, 50, 0.15);
+            margin-bottom: 2.5rem;
+            background: #0a0a0a;
+            aspect-ratio: 1920 / 1080;
+        }
+        .slider-track {
+            display: flex;
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            height: 100%;
+        }
+        .slider-track img {
+            width: 100%;
+            flex-shrink: 0;
+            object-fit: cover;
+            display: block;
+            height: 100%;
+        }
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: 2px solid #4caf50;
+            font-size: 2rem;
+            padding: 0.8rem 1.2rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.3s;
+            z-index: 2;
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slider-btn:hover {
+            background: #2e7d32;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .slider-btn.prev {
+            left: 20px;
+        }
+        .slider-btn.next {
+            right: 20px;
+        }
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 2;
+        }
+        .slider-dots span {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .slider-dots span.active {
+            background: #4caf50;
+            border-color: #ffffff;
+            transform: scale(1.2);
+        }
+
+        /* ===== SECCIÓN ATLETAS ===== */
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 2.5rem 0 1.5rem 0;
+            color: #ffffff;
+            border-left: 6px solid #4caf50;
+            padding-left: 18px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .section-title i {
+            color: #4caf50;
+            margin-right: 12px;
+        }
+
+        /* ===== FILTROS ===== */
+        .filtros-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 2rem;
+            background: #141414;
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #2a2a2a;
+            align-items: center;
+        }
+        .filtros-container label {
+            font-weight: 600;
+            color: #aaaaaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+        }
+        .filtros-container select,
+        .filtros-container input {
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #0a0a0a;
+            color: #ffffff;
+            font-size: 0.95rem;
+            min-width: 150px;
+            transition: border 0.3s;
+        }
+        .filtros-container select:focus,
+        .filtros-container input:focus {
+            border-color: #4caf50;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+        }
+        .filtros-container .btn-buscar {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .filtros-container .btn-buscar:hover {
+            background: #4caf50;
+            transform: scale(1.02);
+        }
+
+        .atletas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* ===== TARJETA DE ATLETA ===== */
+        .atleta-card {
+            background: #1a1a1a;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid #2a2a2a;
+            cursor: pointer;
+            position: relative;
+        }
+        .atleta-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(46, 125, 50, 0.2);
+            border-color: #4caf50;
+        }
+        .atleta-card .img-wrapper {
+            width: 100%;
+            aspect-ratio: 1920 / 1080;
+            overflow: hidden;
+            background: #111;
+            position: relative;
+        }
+        .atleta-card .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .atleta-card:hover .img-wrapper img {
+            transform: scale(1.05);
+        }
+        .atleta-card .info {
+            padding: 1.2rem 1.2rem 1.5rem;
+            text-align: center;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%);
+        }
+        .atleta-card .info h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #4caf50;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .atleta-card .info .subtitle {
+            font-size: 0.9rem;
+            color: #aaaaaa;
+            margin-bottom: 6px;
+        }
+        .atleta-card .info .badge {
+            display: inline-block;
+            background: #2e7d32;
+            color: #ffffff;
+            font-size: 0.7rem;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+        .atleta-card .overlay-data {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.92);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(8px);
+        }
+        .atleta-card .overlay-data.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .atleta-card .overlay-data h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #4caf50;
+            margin-bottom: 0.5rem;
+        }
+        .atleta-card .overlay-data p {
+            font-size: 1rem;
+            color: #dddddd;
+            margin: 4px 0;
+        }
+        .atleta-card .overlay-data .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: #4caf50;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .atleta-card .overlay-data .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        /* ===== VIDEO ===== */
+        .video-wrapper {
+            margin: 2.5rem 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(46, 125, 50, 0.1);
+            background: #0a0a0a;
+            border: 1px solid #2a2a2a;
+        }
+        .video-wrapper video {
+            width: 100%;
+            display: block;
+            background: #000;
+            aspect-ratio: 16/9;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: #0a0a0a;
+            color: #cccccc;
+            padding: 2.5rem 2rem 1.2rem;
+            border-top: 3px solid #2e7d32;
+            margin-top: 2rem;
+        }
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .footer-grid h4 {
+            color: #4caf50;
+            margin-bottom: 0.6rem;
+            font-size: 1.1rem;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+        .footer-grid p,
+        .footer-grid li {
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+        .footer-grid ul {
+            list-style: none;
+        }
+        .footer-grid ul li::before {
+            content: "▸ ";
+            color: #4caf50;
+        }
+        .footer-verse {
+            font-style: italic;
+            color: #aaaaaa;
+            border-left: 3px solid #4caf50;
+            padding-left: 14px;
+            font-size: 0.95rem;
+        }
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid #222;
+            padding-top: 1.2rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .footer-bottom strong {
+            color: #4caf50;
+        }
+
+        /* ===== PANEL ADMIN ===== */
+        .admin-panel {
+            background: #141414;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 6px 35px rgba(0, 0, 0, 0.5);
+            margin: 1.5rem 0;
+            border: 1px solid #2a2a2a;
+        }
+        .admin-panel h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #4caf50;
+            border-bottom: 3px solid #4caf50;
+            padding-bottom: 0.6rem;
+            margin-bottom: 1.8rem;
+            letter-spacing: 2px;
+        }
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+        }
+        .admin-card {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #2a2a2a;
+            transition: border-color 0.3s;
+        }
+        .admin-card:hover {
+            border-color: #4caf50;
+        }
+        .admin-card h3 {
+            color: #4caf50;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+        .admin-card label {
+            display: block;
+            font-weight: 600;
+            margin-top: 0.8rem;
+            font-size: 0.85rem;
+            color: #aaaaaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .admin-card input,
+        .admin-card select {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            margin-top: 4px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: #0a0a0a;
+            color: #ffffff;
+            transition: border 0.3s;
+        }
+        .admin-card input:focus,
+        .admin-card select:focus {
+            border-color: #4caf50;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+        }
+        .admin-card input[type="file"] {
+            padding: 0.5rem;
+            background: #0a0a0a;
+            border: 1px dashed #4caf50;
+            cursor: pointer;
+        }
+        .admin-card input[type="file"]::-webkit-file-upload-button {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn {
+            background: #2e7d32;
+            color: #ffffff;
+            border: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        .btn:hover {
+            background: #4caf50;
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #4caf50;
+            border: 2px solid #4caf50;
+        }
+        .btn-outline:hover {
+            background: #2e7d32;
+            color: #ffffff;
+        }
+        .btn-danger {
+            background: #c62828;
+        }
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+        .btn-sm {
+            padding: 0.3rem 0.9rem;
+            font-size: 0.75rem;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .lista-atletas-admin {
+            margin-top: 1.5rem;
+            background: #0a0a0a;
+            padding: 1rem;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #222;
+        }
+        .lista-atletas-admin table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .lista-atletas-admin th {
+            background: #2e7d32;
+            color: #ffffff;
+            padding: 10px 8px;
+            text-align: left;
+            font-weight: 700;
+        }
+        .lista-atletas-admin td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #222;
+            color: #cccccc;
+            vertical-align: middle;
+        }
+        .lista-atletas-admin tr:hover {
+            background: #1a1a1a;
+        }
+        .lista-atletas-admin .mini-foto {
+            width: 50px;
+            height: 30px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #4caf50;
+        }
+        .lista-atletas-admin .acciones i {
+            cursor: pointer;
+            margin: 0 6px;
+            color: #888;
+            transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+        .lista-atletas-admin .acciones i:hover {
+            color: #4caf50;
+        }
+        .lista-atletas-admin .acciones i.fa-trash:hover {
+            color: #c62828;
+        }
+
+        .msg {
+            background: #1a3a1a;
+            color: #8bc34a;
+            padding: 10px 16px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+        .msg-error {
+            background: #3a1a1a;
+            color: #ef5350;
+            border-left-color: #c62828;
+        }
+        .hidden {
+            display: none !important;
+        }
+
+        /* Loading spinner */
+        .loader {
+            border: 4px solid #1a1a1a;
+            border-top: 4px solid #4caf50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .container {
+                padding: 0.8rem 0.8rem;
+            }
+            .admin-panel {
+                padding: 1rem;
+            }
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            .atletas-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .section-title {
+                font-size: 1.4rem;
+            }
+            .slider-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                padding: 0.4rem;
+            }
+            .slider-btn.prev {
+                left: 8px;
+            }
+            .slider-btn.next {
+                right: 8px;
+            }
+            .slider-dots span {
+                width: 10px;
+                height: 10px;
+            }
+            footer {
+                padding: 1.5rem 1rem;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .filtros-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filtros-container select,
+            .filtros-container input {
+                min-width: unset;
+            }
+        }
+
+        @media (min-width: 601px) and (max-width: 1024px) {
+            .atletas-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ===== BOTÓN DE MÚSICA ===== */
+        .music-toggle {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 999;
+            background: #2e7d32;
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 25px rgba(46, 125, 50, 0.4);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .music-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 40px rgba(46, 125, 50, 0.6);
+        }
+        .music-toggle.playing {
+            background: #c62828;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVEGACIÓN ===== -->
+    <nav>
+        <div class="logo"><i class="fas fa-trophy"></i>OLIMPIADAS <span>2026</span></div>
+        <div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div>
+        <div class="nav-links" id="navLinks">
+            <a href="#" class="active" data-page="inicio"><i class="fas fa-home"></i> Inicio</a>
+            <a href="#" data-page="atletas"><i class="fas fa-users"></i> Atletas</a>
+            <a href="#" data-page="admin"><i class="fas fa-user-shield"></i> Admin</a>
+        </div>
+    </nav>
+
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <div class="container" id="mainContainer">
+
+        <!-- ===== SECCIÓN INICIO ===== -->
+        <div id="page-inicio">
+            <!-- SLIDER -->
+            <div class="slider-container" id="sliderContainer">
+                <div class="slider-track" id="sliderTrack"></div>
+                <button class="slider-btn prev" id="sliderPrev"><i class="fas fa-chevron-left"></i></button>
+                <button class="slider-btn next" id="sliderNext"><i class="fas fa-chevron-right"></i></button>
+                <div class="slider-dots" id="sliderDots"></div>
+            </div>
+
+            <!-- TÍTULO ATLETAS -->
+            <h2 class="section-title"><i class="fas fa-id-card"></i> Nuestros Atletas</h2>
+
+            <!-- FILTROS -->
+            <div class="filtros-container">
+                <label><i class="fas fa-search"></i> Buscar:</label>
+                <input type="text" id="filtroBuscar" placeholder="Nombre o apellido..." style="flex:1; min-width:120px;">
+                <label><i class="fas fa-map-marker-alt"></i> Zona:</label>
+                <select id="filtroZona">
+                    <option value="todas">Todas las zonas</option>
+                    <option value="Zona 1">Zona 1</option>
+                    <option value="Zona 2">Zona 2</option>
+                    <option value="Zona 3">Zona 3</option>
+                    <option value="Zona 4">Zona 4</option>
+                    <option value="Zona 5">Zona 5</option>
+                </select>
+                <button class="btn-buscar" id="btnFiltrar"><i class="fas fa-filter"></i> Filtrar</button>
+                <button class="btn-buscar" style="background:#555;" id="btnLimpiarFiltros"><i class="fas fa-undo"></i> Limpiar</button>
+            </div>
+
+            <div id="atletasGrid" class="atletas-grid">
+                <div class="loader"></div>
+            </div>
+
+            <!-- VIDEO -->
+            <div class="video-wrapper">
+                <video id="mainVideo" controls>
+                    <source src="" type="video/mp4">
+                    Tu navegador no soporta el video.
+                </video>
+            </div>
+        </div>
+
+        <!-- ===== SECCIÓN ATLETAS ===== -->
+        <div id="page-atletas" class="hidden">
+            <h2 class="section-title"><i class="fas fa-list-ul"></i> Todos los Atletas</h2>
+            <div class="filtros-container">
+                <label><i class="fas fa-search"></i> Buscar:</label>
+                <input type="text" id="filtroBuscar2" placeholder="Nombre o apellido..." style="flex:1; min-width:120px;">
+                <label><i class="fas fa-map-marker-alt"></i> Zona:</label>
+                <select id="filtroZona2">
+                    <option value="todas">Todas las zonas</option>
+                    <option value="Zona 1">Zona 1</option>
+                    <option value="Zona 2">Zona 2</option>
+                    <option value="Zona 3">Zona 3</option>
+                    <option value="Zona 4">Zona 4</option>
+                    <option value="Zona 5">Zona 5</option>
+                </select>
+                <button class="btn-buscar" id="btnFiltrar2"><i class="fas fa-filter"></i> Filtrar</button>
+                <button class="btn-buscar" style="background:#555;" id="btnLimpiarFiltros2"><i class="fas fa-undo"></i> Limpiar</button>
+            </div>
+            <div id="atletasListaCompleta" class="atletas-grid">
+                <div class="loader"></div>
+            </div>
+        </div>
+
+        <!-- ===== SECCIÓN ADMIN ===== -->
+        <div id="page-admin" class="hidden">
+            <div class="admin-panel">
+                <h2><i class="fas fa-lock"></i> Panel de Administración</h2>
+                <!-- Login -->
+                <div id="adminLogin">
+                    <p style="margin-bottom:0.8rem; color:#aaa;">Ingresa tus credenciales para acceder al panel:</p>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                        <input type="email" id="adminEmail" placeholder="Email" style="padding:0.7rem; border-radius:8px; border:1px solid #333; background:#0a0a0a; color:#fff; flex:1; min-width:150px;">
+                        <input type="password" id="adminClave" placeholder="Contraseña" style="padding:0.7rem; border-radius:8px; border:1px solid #333; background:#0a0a0a; color:#fff; flex:1; min-width:150px;">
+                        <button class="btn" id="btnLoginAdmin"><i class="fas fa-sign-in-alt"></i> Entrar</button>
+                    </div>
+                    <div id="loginError" class="msg msg-error hidden">Credenciales incorrectas. Intenta de nuevo.</div>
+                    <div id="loginLoading" class="loader" style="display:none;"></div>
+                </div>
+
+                <!-- Panel Admin Contenido -->
+                <div id="adminContent" class="hidden">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+                        <p style="color:#aaa;"><i class="fas fa-user-check" style="color:#4caf50;"></i> Conectado como: <strong id="adminUserEmail">admin</strong></p>
+                        <button class="btn btn-danger" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+                    </div>
+                    <div class="admin-grid">
+                        <!-- REGISTRO DE ATLETA -->
+                        <div class="admin-card">
+                            <h3><i class="fas fa-user-plus"></i> Registrar Atleta</h3>
+                            <label>Nombre</label>
+                            <input type="text" id="regNombre" placeholder="Nombre">
+                            <label>Apellido</label>
+                            <input type="text" id="regApellido" placeholder="Apellido">
+                            <label>Edad</label>
+                            <input type="number" id="regEdad" placeholder="Edad" min="5" max="99">
+                            <label>Zona</label>
+                            <select id="regZona">
+                                <option value="Zona 1">Zona 1</option>
+                                <option value="Zona 2">Zona 2</option>
+                                <option value="Zona 3">Zona 3</option>
+                                <option value="Zona 4">Zona 4</option>
+                                <option value="Zona 5">Zona 5</option>
+                            </select>
+                            <label>Categoría</label>
+                            <select id="regCategoria"></select>
+                            <label>Disciplina</label>
+                            <select id="regDisciplina"></select>
+                            <label>Foto del Atleta</label>
+                            <input type="file" id="regFoto" accept="image/*">
+                            <div id="previewFoto" style="margin-top:8px; display:none;">
+                                <img id="fotoPreviewImg" src="" alt="Vista previa" style="max-width:100%; max-height:150px; border-radius:8px; border:2px solid #4caf50;">
+                            </div>
+                            <button class="btn" id="btnRegistrarAtleta"><i class="fas fa-save"></i> Guardar Atleta</button>
+                            <div id="msgRegistro" class="msg hidden"></div>
+                            <div id="registroLoading" style="display:none; margin-top:10px;">
+                                <div class="loader" style="width:30px;height:30px;"></div>
+                                <p style="color:#888;">Guardando en Firebase...</p>
+                            </div>
+                        </div>
+
+                        <!-- CATEGORÍAS Y DISCIPLINAS -->
+                        <div class="admin-card">
+                            <h3><i class="fas fa-tags"></i> Categorías / Disciplinas</h3>
+                            <label>Nueva Categoría</label>
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <input type="text" id="inputCategoria" placeholder="Ej: Sub-15" style="flex:1;">
+                                <button class="btn btn-sm" id="btnAddCategoria"><i class="fas fa-plus"></i> Agregar</button>
+                            </div>
+                            <label>Nueva Disciplina</label>
+                            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                <input type="text" id="inputDisciplina" placeholder="Ej: 100m" style="flex:1;">
+                                <button class="btn btn-sm" id="btnAddDisciplina"><i class="fas fa-plus"></i> Agregar</button>
+                            </div>
+                            <div style="margin-top:12px; font-size:0.85rem; color:#aaa;">
+                                <strong style="color:#4caf50;">Categorías:</strong> <span id="listaCategoriasDisplay">Cargando...</span><br>
+                                <strong style="color:#4caf50;">Disciplinas:</strong> <span id="listaDisciplinasDisplay">Cargando...</span>
+                            </div>
+                        </div>
+
+                        <!-- AJUSTE DE ATLETAS -->
+                        <div class="admin-card">
+                            <h3><i class="fas fa-edit"></i> Ajuste de Atletas</h3>
+                            <p style="font-size:0.85rem; color:#888;">Edita o elimina atletas registrados.</p>
+                            <div class="lista-atletas-admin" id="listaAdminAtletas">
+                                <div class="loader"></div>
+                            </div>
+                        </div>
+
+                        <!-- DESCARGAR LISTADO POR ZONA -->
+                        <div class="admin-card">
+                            <h3><i class="fas fa-download"></i> Descargar Listado</h3>
+                            <p style="font-size:0.85rem; color:#888;">Exporta atletas por zona.</p>
+                            <label>Seleccionar Zona:</label>
+                            <select id="zonaDescarga">
+                                <option value="todas">Todas las zonas</option>
+                                <option value="Zona 1">Zona 1</option>
+                                <option value="Zona 2">Zona 2</option>
+                                <option value="Zona 3">Zona 3</option>
+                                <option value="Zona 4">Zona 4</option>
+                                <option value="Zona 5">Zona 5</option>
+                            </select>
+                            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                                <button class="btn" id="btnDescargarPDF"><i class="fas fa-file-pdf"></i> PDF</button>
+                                <button class="btn btn-outline" id="btnDescargarWord"><i class="fas fa-file-word"></i> Word</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h4><i class="fas fa-info-circle"></i> OLIMPIADAS 2026</h4>
+                <p>Registro oficial de atletas<br>Evento Deportivo AVCS 2026</p>
+            </div>
+            <div>
+                <h4><i class="fas fa-users"></i> Encargados</h4>
+                <ul>
+                    <li><strong>Coordinador:</strong> Juan Pérez</li>
+                    <li><strong>Líder Juvenil:</strong> María Gómez</li>
+                </ul>
+            </div>
+            <div>
+                <h4><i class="fas fa-bible"></i> Versículo</h4>
+                <p class="footer-verse">"Todo lo que hagáis, hacedlo de corazón, como para el Señor y no para los hombres." — Colosenses 3:23</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 <strong>OLIMPIADAS AVCS</strong> - Todos los derechos reservados
+        </div>
+    </footer>
+
+    <!-- ===== BOTÓN DE MÚSICA ===== -->
+    <button class="music-toggle" id="musicToggle" title="Activar/Desactivar música">
+        <i class="fas fa-music"></i>
+    </button>
+
+    <!-- ===== FIREBASE SDK ===== -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            // 1. CONFIGURACIÓN DE FIREBASE
+            // ============================================================
+            // 🔥 CAMBIA ESTOS DATOS CON LOS DE TU PROYECTO EN FIREBASE 🔥
+            const firebaseConfig = {
+                apiKey: "AIzaSyAQUI4P6Vj_5k0x7f9X8yZ1w2v3u4t5s6",
+                authDomain: "tu-proyecto.firebaseapp.com",
+                projectId: "tu-proyecto",
+                storageBucket: "tu-proyecto.appspot.com",
+                messagingSenderId: "123456789",
+                appId: "1:123456789:web:abcdef123456"
+            };
+
+            // Inicializar Firebase
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.firestore();
+            const storage = firebase.storage();
+            const auth = firebase.auth();
+
+            // Configurar Firestore para usar caché y tiempo real
+            db.settings({ merge: true });
+
+            // ============================================================
+            // 2. VARIABLES GLOBALES
+            // ============================================================
+            let atletas = [];
+            let categorias = [];
+            let disciplinas = [];
+            let adminLogged = false;
+            let editandoId = null;
+            let fotoSeleccionada = null;
+            let listaAtletasUnsubscribe = null;
+            let categoriasUnsubscribe = null;
+            let disciplinasUnsubscribe = null;
+
+            const FOTO_DEFAULT = 'https://via.placeholder.com/1920x1080/1a1a1a/4caf50?text=Atleta+AVCS';
+
+            // ============================================================
+            // 3. SLIDER - IMÁGENES 1920x1080
+            // ============================================================
+            const sliderImages = [
+                'https://via.placeholder.com/1920x1080/1a1a1a/4caf50?text=OLIMPIADAS+2026+-+Slide+1',
+                'https://via.placeholder.com/1920x1080/2a2a2a/4caf50?text=OLIMPIADAS+2026+-+Slide+2',
+                'https://via.placeholder.com/1920x1080/1a1a1a/4caf50?text=OLIMPIADAS+2026+-+Slide+3',
+                'https://via.placeholder.com/1920x1080/2a2a2a/4caf50?text=OLIMPIADAS+2026+-+Slide+4',
+                'https://via.placeholder.com/1920x1080/1a1a1a/4caf50?text=OLIMPIADAS+2026+-+Slide+5'
+            ];
+            let sliderIndex = 0;
+
+            // ============================================================
+            // 4. VIDEO Y MÚSICA
+            // ============================================================
+            const VIDEO_URL = 'https://www.w3schools.com/html/mov_bbb.mp4';
+            const MUSIC_URL = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+
+            // ============================================================
+            // 5. DOM REFERENCES
+            // ============================================================
+            const $ = (sel) => document.querySelector(sel);
+            const $$ = (sel) => document.querySelectorAll(sel);
+
+            const pages = {
+                inicio: document.getElementById('page-inicio'),
+                atletas: document.getElementById('page-atletas'),
+                admin: document.getElementById('page-admin'),
+            };
+            const navLinks = $$('.nav-links a');
+            const atletasGrid = document.getElementById('atletasGrid');
+            const atletasListaCompleta = document.getElementById('atletasListaCompleta');
+
+            const sliderTrack = document.getElementById('sliderTrack');
+            const sliderDots = document.getElementById('sliderDots');
+            const sliderPrev = document.getElementById('sliderPrev');
+            const sliderNext = document.getElementById('sliderNext');
+
+            const adminLogin = document.getElementById('adminLogin');
+            const adminContent = document.getElementById('adminContent');
+            const btnLogin = document.getElementById('btnLoginAdmin');
+            const adminEmail = document.getElementById('adminEmail');
+            const adminClave = document.getElementById('adminClave');
+            const loginError = document.getElementById('loginError');
+            const loginLoading = document.getElementById('loginLoading');
+            const adminUserEmail = document.getElementById('adminUserEmail');
+            const btnLogout = document.getElementById('btnLogout');
+
+            const regNombre = document.getElementById('regNombre');
+            const regApellido = document.getElementById('regApellido');
+            const regEdad = document.getElementById('regEdad');
+            const regZona = document.getElementById('regZona');
+            const regCategoria = document.getElementById('regCategoria');
+            const regDisciplina = document.getElementById('regDisciplina');
+            const regFoto = document.getElementById('regFoto');
+            const previewFoto = document.getElementById('previewFoto');
+            const fotoPreviewImg = document.getElementById('fotoPreviewImg');
+            const btnRegistrar = document.getElementById('btnRegistrarAtleta');
+            const msgRegistro = document.getElementById('msgRegistro');
+            const registroLoading = document.getElementById('registroLoading');
+
+            const inputCategoria = document.getElementById('inputCategoria');
+            const inputDisciplina = document.getElementById('inputDisciplina');
+            const btnAddCategoria = document.getElementById('btnAddCategoria');
+            const btnAddDisciplina = document.getElementById('btnAddDisciplina');
+            const listaCategoriasDisplay = document.getElementById('listaCategoriasDisplay');
+            const listaDisciplinasDisplay = document.getElementById('listaDisciplinasDisplay');
+
+            const listaAdminAtletas = document.getElementById('listaAdminAtletas');
+            const btnPDF = document.getElementById('btnDescargarPDF');
+            const btnWord = document.getElementById('btnDescargarWord');
+            const zonaDescarga = document.getElementById('zonaDescarga');
+
+            const mainVideo = document.getElementById('mainVideo');
+            const musicToggle = document.getElementById('musicToggle');
+
+            const filtroBuscar = document.getElementById('filtroBuscar');
+            const filtroZona = document.getElementById('filtroZona');
+            const btnFiltrar = document.getElementById('btnFiltrar');
+            const btnLimpiarFiltros = document.getElementById('btnLimpiarFiltros');
+            const filtroBuscar2 = document.getElementById('filtroBuscar2');
+            const filtroZona2 = document.getElementById('filtroZona2');
+            const btnFiltrar2 = document.getElementById('btnFiltrar2');
+            const btnLimpiarFiltros2 = document.getElementById('btnLimpiarFiltros2');
+
+            // ============================================================
+            // 6. ESCUCHA EN TIEMPO REAL - ATLETAS
+            // ============================================================
+            function iniciarEscuchaAtletas() {
+                if (listaAtletasUnsubscribe) {
+                    listaAtletasUnsubscribe();
+                }
+
+                listaAtletasUnsubscribe = db.collection('atletas')
+                    .orderBy('nombre')
+                    .onSnapshot((snapshot) => {
+                        atletas = [];
+                        snapshot.forEach(doc => {
+                            atletas.push({
+                                id: doc.id,
+                                ...doc.data()
+                            });
+                        });
+                        renderAllAtletas();
+                    }, (error) => {
+                        console.error('Error en escucha de atletas:', error);
+                        mostrarMensajeAdmin('Error al cargar atletas: ' + error.message, 'error');
+                    });
+            }
+
+            // ============================================================
+            // 7. ESCUCHA EN TIEMPO REAL - CATEGORÍAS Y DISCIPLINAS
+            // ============================================================
+            function iniciarEscuchaCategorias() {
+                if (categoriasUnsubscribe) {
+                    categoriasUnsubscribe();
+                }
+                categoriasUnsubscribe = db.collection('configuracion').doc('categorias')
+                    .onSnapshot((doc) => {
+                        if (doc.exists) {
+                            categorias = doc.data().lista || [];
+                        } else {
+                            categorias = ['Sub-13', 'Sub-15', 'Sub-17', 'Sub-20', 'Abierta'];
+                            db.collection('configuracion').doc('categorias').set({ lista: categorias });
+                        }
+                        actualizarSelectores();
+                    }, (error) => {
+                        console.error('Error en escucha de categorías:', error);
+                    });
+            }
+
+            function iniciarEscuchaDisciplinas() {
+                if (disciplinasUnsubscribe) {
+                    disciplinasUnsubscribe();
+                }
+                disciplinasUnsubscribe = db.collection('configuracion').doc('disciplinas')
+                    .onSnapshot((doc) => {
+                        if (doc.exists) {
+                            disciplinas = doc.data().lista || [];
+                        } else {
+                            disciplinas = ['100m', '200m', '400m', 'Salto Largo', 'Salto Alto', 'Lanzamiento Bala'];
+                            db.collection('configuracion').doc('disciplinas').set({ lista: disciplinas });
+                        }
+                        actualizarSelectores();
+                    }, (error) => {
+                        console.error('Error en escucha de disciplinas:', error);
+                    });
+            }
+
+            // ============================================================
+            // 8. RENDER ATLETAS CON FILTROS
+            // ============================================================
+            function getAtletasFiltrados(buscar, zona) {
+                let filtrados = [...atletas];
+                if (buscar && buscar.trim() !== '') {
+                    const term = buscar.trim().toLowerCase();
+                    filtrados = filtrados.filter(a =>
+                        a.nombre && a.nombre.toLowerCase().includes(term) ||
+                        a.apellido && a.apellido.toLowerCase().includes(term)
+                    );
+                }
+                if (zona && zona !== 'todas') {
+                    filtrados = filtrados.filter(a => a.zona === zona);
+                }
+                return filtrados;
+            }
+
+            function renderAtletas(container, atletasList, withOverlay = true) {
+                if (!container) return;
+                if (!atletasList || atletasList.length === 0) {
+                    container.innerHTML =
+                        `<p style="grid-column:1/-1; text-align:center; color:#666; padding:2.5rem; font-size:1.2rem;">No hay atletas que coincidan con los filtros.</p>`;
+                    return;
+                }
+                let html = '';
+                atletasList.forEach(a => {
+                    const fotoUrl = a.foto || FOTO_DEFAULT;
+                    html += `
+                        <div class="atleta-card" data-id="${a.id}">
+                            <div class="img-wrapper">
+                                <img src="${fotoUrl}" alt="${a.nombre || ''} ${a.apellido || ''}" loading="lazy">
+                            </div>
+                            <div class="info">
+                                <h3>${a.nombre || ''} ${a.apellido || ''}</h3>
+                                <div class="subtitle">${a.zona || 'Sin zona'} • ${a.edad || '?'} años</div>
+                                <span class="badge">${a.categoria || 'Sin categoría'}</span>
+                                <span class="badge" style="background:#555;">${a.disciplina || 'Sin disciplina'}</span>
+                            </div>
+                            ${withOverlay ? `
+                            <div class="overlay-data" data-id="${a.id}">
+                                <span class="close-btn" data-id="${a.id}"><i class="fas fa-times"></i></span>
+                                <h3>${a.nombre || ''} ${a.apellido || ''}</h3>
+                                <p><i class="fas fa-calendar-alt" style="color:#4caf50;"></i> Edad: ${a.edad || '?'} años</p>
+                                <p><i class="fas fa-map-marker-alt" style="color:#4caf50;"></i> Zona: ${a.zona || 'Sin zona'}</p>
+                                <p><i class="fas fa-tag" style="color:#4caf50;"></i> Categoría: ${a.categoria || 'Sin categoría'}</p>
+                                <p><i class="fas fa-medal" style="color:#4caf50;"></i> Disciplina: ${a.disciplina || 'Sin disciplina'}</p>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+
+                if (withOverlay) {
+                    container.querySelectorAll('.atleta-card').forEach(card => {
+                        card.addEventListener('click', function(e) {
+                            if (e.target.closest('.close-btn')) return;
+                            const overlay = this.querySelector('.overlay-data');
+                            if (overlay) {
+                                overlay.classList.toggle('open');
+                            }
+                        });
+                    });
+                    container.querySelectorAll('.close-btn').forEach(btn => {
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const overlay = this.closest('.overlay-data');
+                            if (overlay) {
+                                overlay.classList.remove('open');
+                            }
+                        });
+                    });
+                }
+            }
+
+            function renderAllAtletas() {
+                const buscar1 = filtroBuscar.value;
+                const zona1 = filtroZona.value;
+                const filtrados1 = getAtletasFiltrados(buscar1, zona1);
+                renderAtletas(atletasGrid, filtrados1, true);
+
+                const buscar2 = filtroBuscar2.value;
+                const zona2 = filtroZona2.value;
+                const filtrados2 = getAtletasFiltrados(buscar2, zona2);
+                renderAtletas(atletasListaCompleta, filtrados2, true);
+
+                renderListaAdmin();
+            }
+
+            // ============================================================
+            // 9. RENDER LISTA ADMIN
+            // ============================================================
+            function renderListaAdmin() {
+                if (!listaAdminAtletas) return;
+                if (atletas.length === 0) {
+                    listaAdminAtletas.innerHTML =
+                        `<p style="text-align:center; color:#666; padding:1rem;">No hay atletas registrados.</p>`;
+                    return;
+                }
+                let html = `<table>
+                    <thead><tr><th>Foto</th><th>Nombre</th><th>Zona</th><th>Cat.</th><th>Acciones</th></tr></thead><tbody>`;
+                atletas.forEach(a => {
+                    const fotoUrl = a.foto || FOTO_DEFAULT;
+                    html += `
+                        <tr>
+                            <td><img src="${fotoUrl}" alt="${a.nombre || ''}" class="mini-foto" onerror="this.src='${FOTO_DEFAULT}'"></td>
+                            <td><strong>${a.nombre || ''} ${a.apellido || ''}</strong> (${a.edad || '?'})</td>
+                            <td>${a.zona || 'Sin zona'}</td>
+                            <td>${a.categoria || 'Sin cat.'}</td>
+                            <td class="acciones">
+                                <i class="fas fa-edit" title="Editar" data-id="${a.id}"></i>
+                                <i class="fas fa-trash" title="Eliminar" data-id="${a.id}"></i>
+                            </td>
+                        </tr>
+                    `;
+                });
+                html += `</tbody></table>`;
+                listaAdminAtletas.innerHTML = html;
+
+                listaAdminAtletas.querySelectorAll('.fa-edit').forEach(el => {
+                    el.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        editarAtleta(id);
+                    });
+                });
+                listaAdminAtletas.querySelectorAll('.fa-trash').forEach(el => {
+                    el.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        if (confirm('¿Eliminar este atleta?')) {
+                            eliminarAtleta(id);
+                        }
+                    });
+                });
+            }
+
+            // ============================================================
+            // 10. CRUD CON FIREBASE
+            // ============================================================
+            async function registrarAtleta() {
+                const nombre = regNombre.value.trim();
+                const apellido = regApellido.value.trim();
+                const edad = parseInt(regEdad.value);
+                const zona = regZona.value;
+                const categoria = regCategoria.value;
+                const disciplina = regDisciplina.value;
+
+                if (!nombre || !apellido || !edad || !categoria || !disciplina) {
+                    mostrarMsgRegistro('Todos los campos son obligatorios.', 'error');
+                    return;
+                }
+                if (isNaN(edad) || edad < 5 || edad > 99) {
+                    mostrarMsgRegistro('Edad debe ser entre 5 y 99.', 'error');
+                    return;
+                }
+
+                // Mostrar loading
+                btnRegistrar.disabled = true;
+                registroLoading.style.display = 'block';
+                msgRegistro.classList.add('hidden');
+
+                try {
+                    let fotoUrl = FOTO_DEFAULT;
+
+                    // Subir foto a Firebase Storage si hay una seleccionada
+                    if (fotoSeleccionada) {
+                        const file = regFoto.files[0];
+                        const storageRef = storage.ref();
+                        const fileRef = storageRef.child(`atletas/${Date.now()}_${file.name}`);
+                        const snapshot = await fileRef.put(file);
+                        fotoUrl = await snapshot.ref.getDownloadURL();
+                    }
+
+                    const data = {
+                        nombre,
+                        apellido,
+                        edad,
+                        zona,
+                        categoria,
+                        disciplina,
+                        foto: fotoUrl,
+                        fechaCreacion: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+
+                    if (editandoId) {
+                        // Actualizar
+                        await db.collection('atletas').doc(editandoId).update(data);
+                        mostrarMsgRegistro('Atleta actualizado correctamente.', 'success');
+                        editandoId = null;
+                    } else {
+                        // Crear nuevo
+                        await db.collection('atletas').add(data);
+                        mostrarMsgRegistro('Atleta registrado correctamente.', 'success');
+                    }
+
+                    limpiarFormulario();
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    mostrarMsgRegistro('Error: ' + error.message, 'error');
+                } finally {
+                    btnRegistrar.disabled = false;
+                    registroLoading.style.display = 'none';
+                }
+            }
+
+            async function eliminarAtleta(id) {
+                try {
+                    // Obtener el atleta para eliminar su foto
+                    const doc = await db.collection('atletas').doc(id).get();
+                    if (doc.exists) {
+                        const data = doc.data();
+                        if (data.foto && data.foto !== FOTO_DEFAULT) {
+                            try {
+                                const ref = storage.refFromURL(data.foto);
+                                await ref.delete();
+                            } catch (e) {
+                                console.log('No se pudo eliminar la foto:', e);
+                            }
+                        }
+                    }
+                    await db.collection('atletas').doc(id).delete();
+                    mostrarMensajeAdmin('Atleta eliminado correctamente.', 'success');
+                } catch (error) {
+                    console.error('Error al eliminar:', error);
+                    mostrarMensajeAdmin('Error al eliminar: ' + error.message, 'error');
+                }
+            }
+
+            function editarAtleta(id) {
+                const atleta = atletas.find(a => a.id === id);
+                if (!atleta) return;
+
+                editandoId = id;
+                regNombre.value = atleta.nombre || '';
+                regApellido.value = atleta.apellido || '';
+                regEdad.value = atleta.edad || '';
+                regZona.value = atleta.zona || 'Zona 1';
+                regCategoria.value = atleta.categoria || '';
+                regDisciplina.value = atleta.disciplina || '';
+
+                if (atleta.foto && atleta.foto !== FOTO_DEFAULT) {
+                    previewFoto.style.display = 'block';
+                    fotoPreviewImg.src = atleta.foto;
+                } else {
+                    previewFoto.style.display = 'none';
+                }
+
+                btnRegistrar.innerHTML = '<i class="fas fa-sync-alt"></i> Actualizar Atleta';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function limpiarFormulario() {
+                regNombre.value = '';
+                regApellido.value = '';
+                regEdad.value = '';
+                regZona.value = 'Zona 1';
+                regFoto.value = '';
+                previewFoto.style.display = 'none';
+                fotoSeleccionada = null;
+                editandoId = null;
+                btnRegistrar.innerHTML = '<i class="fas fa-save"></i> Guardar Atleta';
+                msgRegistro.classList.add('hidden');
+                registroLoading.style.display = 'none';
+                btnRegistrar.disabled = false;
+            }
+
+            function mostrarMsgRegistro(texto, tipo = 'success') {
+                msgRegistro.textContent = texto;
+                msgRegistro.className = 'msg ' + (tipo === 'error' ? 'msg-error' : '');
+                msgRegistro.classList.remove('hidden');
+                setTimeout(() => msgRegistro.classList.add('hidden'), 5000);
+            }
+
+            function mostrarMensajeAdmin(texto, tipo = 'success') {
+                const msg = document.createElement('div');
+                msg.className = 'msg ' + (tipo === 'error' ? 'msg-error' : '');
+                msg.textContent = texto;
+                const container = document.querySelector('.admin-panel');
+                container.insertBefore(msg, container.firstChild);
+                setTimeout(() => msg.remove(), 5000);
+            }
+
+            // ============================================================
+            // 11. PREVISUALIZACIÓN DE FOTO
+            // ============================================================
+            regFoto.addEventListener('change', function(e) {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        fotoSeleccionada = ev.target.result;
+                        previewFoto.style.display = 'block';
+                        fotoPreviewImg.src = fotoSeleccionada;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewFoto.style.display = 'none';
+                    fotoSeleccionada = null;
+                }
+            });
+
+            // ============================================================
+            // 12. SELECTORES
+            // ============================================================
+            function actualizarSelectores() {
+                regCategoria.innerHTML = '';
+                categorias.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c;
+                    opt.textContent = c;
+                    regCategoria.appendChild(opt);
+                });
+                regDisciplina.innerHTML = '';
+                disciplinas.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d;
+                    opt.textContent = d;
+                    regDisciplina.appendChild(opt);
+                });
+                listaCategoriasDisplay.textContent = categorias.length ? categorias.join(', ') : 'Ninguna';
+                listaDisciplinasDisplay.textContent = disciplinas.length ? disciplinas.join(', ') : 'Ninguna';
+            }
+
+            // ============================================================
+            // 13. AGREGAR CATEGORÍA / DISCIPLINA EN FIRESTORE
+            // ============================================================
+            async function agregarCategoria() {
+                const val = inputCategoria.value.trim();
+                if (!val) { alert('Ingresa un nombre válido.'); return; }
+                if (categorias.includes(val)) { alert('La categoría ya existe.'); return; }
+                try {
+                    const newList = [...categorias, val];
+                    await db.collection('configuracion').doc('categorias').update({ lista: newList });
+                    inputCategoria.value = '';
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            }
+
+            async function agregarDisciplina() {
+                const val = inputDisciplina.value.trim();
+                if (!val) { alert('Ingresa un nombre válido.'); return; }
+                if (disciplinas.includes(val)) { alert('La disciplina ya existe.'); return; }
+                try {
+                    const newList = [...disciplinas, val];
+                    await db.collection('configuracion').doc('disciplinas').update({ lista: newList });
+                    inputDisciplina.value = '';
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            }
+
+            // ============================================================
+            // 14. SLIDER
+            // ============================================================
+            function initSlider() {
+                sliderTrack.innerHTML = '';
+                sliderImages.forEach((url) => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = 'OLIMPIADAS 2026';
+                    img.loading = 'lazy';
+                    sliderTrack.appendChild(img);
+                });
+
+                sliderDots.innerHTML = '';
+                sliderImages.forEach((_, i) => {
+                    const span = document.createElement('span');
+                    span.dataset.index = i;
+                    if (i === 0) span.classList.add('active');
+                    span.addEventListener('click', () => goToSlide(i));
+                    sliderDots.appendChild(span);
+                });
+                goToSlide(0);
+            }
+
+            function goToSlide(index) {
+                const total = sliderImages.length;
+                if (index < 0) index = total - 1;
+                if (index >= total) index = 0;
+                sliderIndex = index;
+                sliderTrack.style.transform = `translateX(-${index * 100}%)`;
+                document.querySelectorAll('.slider-dots span').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+
+            function nextSlide() { goToSlide(sliderIndex + 1); }
+
+            function prevSlide() { goToSlide(sliderIndex - 1); }
+
+            // ============================================================
+            // 15. NAVEGACIÓN
+            // ============================================================
+            function navigateTo(page) {
+                Object.keys(pages).forEach(key => {
+                    pages[key].classList.toggle('hidden', key !== page);
+                });
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.dataset.page === page);
+                });
+                if (page === 'admin') {
+                    if (adminLogged) {
+                        adminLogin.classList.add('hidden');
+                        adminContent.classList.remove('hidden');
+                    } else {
+                        adminLogin.classList.remove('hidden');
+                        adminContent.classList.add('hidden');
+                    }
+                }
+                document.getElementById('navLinks').classList.remove('open');
+            }
+
+            // ============================================================
+            // 16. AUTENTICACIÓN CON FIREBASE
+            // ============================================================
+            async function loginAdmin() {
+                const email = adminEmail.value.trim();
+                const password = adminClave.value.trim();
+
+                if (!email || !password) {
+                    loginError.textContent = 'Ingresa email y contraseña.';
+                    loginError.classList.remove('hidden');
+                    return;
+                }
+
+                loginLoading.style.display = 'block';
+                btnLogin.disabled = true;
+                loginError.classList.add('hidden');
+
+                try {
+                    await auth.signInWithEmailAndPassword(email, password);
+                    adminLogged = true;
+                    adminLogin.classList.add('hidden');
+                    adminContent.classList.remove('hidden');
+                    adminUserEmail.textContent = email;
+                    loginLoading.style.display = 'none';
+                    btnLogin.disabled = false;
+                    iniciarEscuchaAtletas();
+                    iniciarEscuchaCategorias();
+                    iniciarEscuchaDisciplinas();
+                } catch (error) {
+                    loginLoading.style.display = 'none';
+                    btnLogin.disabled = false;
+                    loginError.textContent = 'Error: ' + error.message;
+                    loginError.classList.remove('hidden');
+                }
+            }
+
+            async function logoutAdmin() {
+                try {
+                    await auth.signOut();
+                    adminLogged = false;
+                    adminLogin.classList.remove('hidden');
+                    adminContent.classList.add('hidden');
+                    if (listaAtletasUnsubscribe) {
+                        listaAtletasUnsubscribe();
+                        listaAtletasUnsubscribe = null;
+                    }
+                    if (categoriasUnsubscribe) {
+                        categoriasUnsubscribe();
+                        categoriasUnsubscribe = null;
+                    }
+                    if (disciplinasUnsubscribe) {
+                        disciplinasUnsubscribe();
+                        disciplinasUnsubscribe = null;
+                    }
+                    atletas = [];
+                    renderAllAtletas();
+                } catch (error) {
+                    console.error('Error al cerrar sesión:', error);
+                }
+            }
+
+            // Verificar estado de autenticación
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    adminLogged = true;
+                    adminLogin.classList.add('hidden');
+                    adminContent.classList.remove('hidden');
+                    adminUserEmail.textContent = user.email;
+                    iniciarEscuchaAtletas();
+                    iniciarEscuchaCategorias();
+                    iniciarEscuchaDisciplinas();
+                    navigateTo('admin');
+                } else {
+                    adminLogged = false;
+                    adminLogin.classList.remove('hidden');
+                    adminContent.classList.add('hidden');
+                }
+            });
+
+            // ============================================================
+            // 17. DESCARGAS
+            // ============================================================
+            function getAtletasParaDescarga() {
+                const zona = zonaDescarga.value;
+                if (zona === 'todas') return atletas;
+                return atletas.filter(a => a.zona === zona);
+            }
+
+            function descargarPDF() {
+                const lista = getAtletasParaDescarga();
+                if (lista.length === 0) { alert('No hay atletas en esta zona para descargar.'); return; }
+                const zona = zonaDescarga.value === 'todas' ? 'TODAS LAS ZONAS' : zonaDescarga.value;
+                const ventana = window.open('', '_blank');
+                if (!ventana) { alert('Permite ventanas emergentes.'); return; }
+                ventana.document.write(`
+                    <html><head><title>OLIMPIADAS 2026 - Atletas</title>
+                    <style>
+                        body{font-family:Arial;padding:2rem;background:#0a0a0a;color:#fff;}
+                        h1{color:#4caf50;font-family:'Orbitron',sans-serif;}
+                        h2{color:#4caf50;}
+                        .atleta{margin-bottom:1.2rem;border-bottom:1px solid #333;padding-bottom:0.8rem;}
+                        strong{color:#4caf50;}
+                    </style>
+                    </head><body>
+                    <h1>🏆 OLIMPIADAS 2026 AVCS</h1>
+                    <h2>Listado de Atletas - ${zona}</h2>
+                    ${lista.map(a => `
+                        <div class="atleta">
+                            <strong>${a.nombre || ''} ${a.apellido || ''}</strong><br>
+                            Edad: ${a.edad || '?'} | Zona: ${a.zona || 'Sin zona'} | Categoría: ${a.categoria || 'Sin cat.'} | Disciplina: ${a.disciplina || 'Sin disc.'}
+                        </div>
+                    `).join('')}
+                    <p><strong style="color:#4caf50;">Total: ${lista.length} atletas</strong></p>
+                    <p style="color:#666;margin-top:2rem;">Generado el ${new Date().toLocaleDateString()}</p>
+                    </body></html>
+                `);
+                ventana.document.close();
+                ventana.print();
+            }
+
+            function descargarWord() {
+                const lista = getAtletasParaDescarga();
+                if (lista.length === 0) { alert('No hay atletas en esta zona para descargar.'); return; }
+                const zona = zonaDescarga.value === 'todas' ? 'TODAS LAS ZONAS' : zonaDescarga.value;
+                let texto = `=== OLIMPIADAS 2026 AVCS - LISTADO DE ATLETAS ===\n`;
+                texto += `=== ZONA: ${zona} ===\n\n`;
+                lista.forEach((a, i) => {
+                    texto += `${i+1}. ${a.nombre || ''} ${a.apellido || ''}\n`;
+                    texto += `   Edad: ${a.edad || '?'} | Zona: ${a.zona || 'Sin zona'} | Categoría: ${a.categoria || 'Sin cat.'} | Disciplina: ${a.disciplina || 'Sin disc.'}\n\n`;
+                });
+                texto += `Total de atletas: ${lista.length}\n`;
+                const blob = new Blob([texto], { type: 'application/msword' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `olimpiadas_${zona.replace(/ /g, '_')}_${new Date().toISOString().slice(0,10)}.doc`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            // ============================================================
+            // 18. MÚSICA
+            // ============================================================
+            let audio = null;
+            let musicPlaying = false;
+
+            function toggleMusic() {
+                if (!audio) {
+                    audio = new Audio(MUSIC_URL);
+                    audio.loop = true;
+                    audio.volume = 0.5;
+                }
+                if (musicPlaying) {
+                    audio.pause();
+                    musicPlaying = false;
+                    musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+                    musicToggle.classList.remove('playing');
+                } else {
+                    audio.play().catch(() => {
+                        alert('Haz clic en la página para activar la música.');
+                    });
+                    musicPlaying = true;
+                    musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+                    musicToggle.classList.add('playing');
+                }
+            }
+
+            // ============================================================
+            // 19. EVENTOS E INICIO
+            // ============================================================
+
+            // Slider
+            initSlider();
+            sliderPrev.addEventListener('click', prevSlide);
+            sliderNext.addEventListener('click', nextSlide);
+            let sliderInterval = setInterval(nextSlide, 6000);
+            const sliderContainer = document.getElementById('sliderContainer');
+            sliderContainer.addEventListener('mouseenter', () => clearInterval(sliderInterval));
+            sliderContainer.addEventListener('mouseleave', () => {
+                clearInterval(sliderInterval);
+                sliderInterval = setInterval(nextSlide, 6000);
+            });
+
+            // Video
+            mainVideo.src = VIDEO_URL;
+            mainVideo.load();
+
+            // Navegación
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    navigateTo(this.dataset.page);
+                });
+            });
+
+            // Login
+            btnLogin.addEventListener('click', loginAdmin);
+            adminEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginAdmin(); });
+            adminClave.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginAdmin(); });
+            btnLogout.addEventListener('click', logoutAdmin);
+
+            // Registrar
+            btnRegistrar.addEventListener('click', registrarAtleta);
+
+            // Agregar categoría / disciplina
+            btnAddCategoria.addEventListener('click', agregarCategoria);
+            btnAddDisciplina.addEventListener('click', agregarDisciplina);
+
+            // Descargas
+            btnPDF.addEventListener('click', descargarPDF);
+            btnWord.addEventListener('click', descargarWord);
+
+            // Filtros
+            function aplicarFiltros() {
+                renderAllAtletas();
+            }
+            btnFiltrar.addEventListener('click', aplicarFiltros);
+            btnFiltrar2.addEventListener('click', aplicarFiltros);
+            btnLimpiarFiltros.addEventListener('click', function() {
+                filtroBuscar.value = '';
+                filtroZona.value = 'todas';
+                renderAllAtletas();
+            });
+            btnLimpiarFiltros2.addEventListener('click', function() {
+                filtroBuscar2.value = '';
+                filtroZona2.value = 'todas';
+                renderAllAtletas();
+            });
+
+            // Menú hamburguesa
+            document.getElementById('menuToggle').addEventListener('click', function() {
+                document.getElementById('navLinks').classList.toggle('open');
+            });
+
+            // Música
+            musicToggle.addEventListener('click', toggleMusic);
+            document.addEventListener('click', function initAudio() {
+                if (!audio) {
+                    audio = new Audio(MUSIC_URL);
+                    audio.loop = true;
+                    audio.volume = 0.5;
+                }
+                document.removeEventListener('click', initAudio);
+            }, { once: true });
+
+            // Cargar datos iniciales
+            actualizarSelectores();
+
+            // Si no hay usuario autenticado, mostrar login
+            if (!auth.currentUser) {
+                navigateTo('admin');
+            }
+
+            console.log('🔥 Firebase conectado!');
+            console.log('📧 Usa el email y contraseña que registraste en Firebase Authentication');
+
+        })();
+    </script>
+</body>
+</html>
