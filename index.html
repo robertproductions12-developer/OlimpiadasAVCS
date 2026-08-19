@@ -1209,7 +1209,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
-    <!-- ===== SCRIPTS ===== -->
+    <!-- ===== SCRIPTS COMPLETOS CORREGIDOS ===== -->
     <script>
         (function() {
             'use strict';
@@ -1248,7 +1248,7 @@
             ];
 
             // 🎬 VIDEO - Reemplaza con la URL de tu video MP4
-            const VIDEO_URL = 'video.mp4';
+            const VIDEO_URL = 'https://www.w3schools.com/html/mov_bbb.mp4';
 
             // 🎵 MÚSICA - Reemplaza con la URL de tu música MP3
             const MUSIC_URL = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
@@ -1263,7 +1263,7 @@
             const auth = firebase.auth();
 
             db.enablePersistence({ synchronizeTabs: true })
-                .catch(err => console.warn('Error de persistencia:', err));
+                .catch(err => console.warn('⚠️ Persistencia no disponible:', err));
 
             // ============================================================
             // 4. VARIABLES GLOBALES
@@ -1368,7 +1368,7 @@
 
                     if (!response.ok) {
                         const errorData = await response.json();
-                        throw new Error(errorData.error.message || 'Error al subir a Cloudinary');
+                        throw new Error(errorData.error?.message || 'Error al subir a Cloudinary');
                     }
 
                     const data = await response.json();
@@ -1470,6 +1470,9 @@
                         }, (error) => {
                             console.error('Error en escucha de atletas:', error);
                             mostrarError('Error al cargar atletas: ' + error.message);
+                            if (atletasGrid) {
+                                atletasGrid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:#ef5350; padding:2rem;">❌ Error cargando atletas: ${error.message}</p>`;
+                            }
                         });
                 } catch (error) {
                     console.error('Error iniciando escucha:', error);
@@ -1537,7 +1540,6 @@
                             `;
                         });
                         listaCategoriasAdmin.innerHTML = html;
-                        // Eventos para eliminar
                         listaCategoriasAdmin.querySelectorAll('.delete-item').forEach(el => {
                             el.addEventListener('click', function() {
                                 const tipo = this.dataset.tipo;
@@ -1758,16 +1760,17 @@
                 const categoria = regCategoria.value;
                 const disciplina = regDisciplina.value;
 
+                // VALIDACIONES
                 if (!nombre || !apellido) {
-                    mostrarMsgRegistro('Nombre y Apellido son obligatorios.', 'error');
+                    mostrarMsgRegistro('⚠️ Nombre y Apellido son obligatorios.', 'error');
                     return;
                 }
                 if (!edad || isNaN(edad) || edad < 5 || edad > 99) {
-                    mostrarMsgRegistro('Edad debe ser un número entre 5 y 99.', 'error');
+                    mostrarMsgRegistro('⚠️ Edad debe ser un número entre 5 y 99.', 'error');
                     return;
                 }
                 if (!categoria || !disciplina) {
-                    mostrarMsgRegistro('Selecciona una categoría y disciplina.', 'error');
+                    mostrarMsgRegistro('⚠️ Selecciona una categoría y disciplina.', 'error');
                     return;
                 }
 
@@ -1899,6 +1902,7 @@
             // 17. SELECTORES
             // ============================================================
             function actualizarSelectores() {
+                // Categorías
                 regCategoria.innerHTML = '';
                 if (categorias.length > 0) {
                     categorias.forEach(c => {
@@ -1914,6 +1918,7 @@
                     regCategoria.appendChild(opt);
                 }
 
+                // Disciplinas
                 regDisciplina.innerHTML = '';
                 if (disciplinas.length > 0) {
                     disciplinas.forEach(d => {
@@ -1967,7 +1972,7 @@
             }
 
             // ============================================================
-            // 19. SLIDER - USA LA VARIABLE SLIDER_IMAGES
+            // 19. SLIDER
             // ============================================================
             let sliderIndex = 0;
 
@@ -2187,6 +2192,7 @@
             // 24. EVENTOS E INICIO
             // ============================================================
 
+            // Inicializar slider
             initSlider();
             sliderPrev.addEventListener('click', prevSlide);
             sliderNext.addEventListener('click', nextSlide);
@@ -2198,11 +2204,13 @@
                 sliderInterval = setInterval(nextSlide, 6000);
             });
 
+            // Video
             if (mainVideo) {
                 mainVideo.src = VIDEO_URL;
                 mainVideo.load();
             }
 
+            // Navegación
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -2210,19 +2218,24 @@
                 });
             });
 
+            // Login
             btnLogin.addEventListener('click', loginAdmin);
             adminEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginAdmin(); });
             adminClave.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginAdmin(); });
             btnLogout.addEventListener('click', logoutAdmin);
 
+            // Registrar
             btnRegistrar.addEventListener('click', registrarAtleta);
 
+            // Agregar categoría / disciplina
             btnAddCategoria.addEventListener('click', agregarCategoria);
             btnAddDisciplina.addEventListener('click', agregarDisciplina);
 
+            // Descargas
             btnPDF.addEventListener('click', descargarPDF);
             btnWord.addEventListener('click', descargarWord);
 
+            // Filtros
             function aplicarFiltros() {
                 renderAllAtletas();
             }
@@ -2239,10 +2252,12 @@
                 renderAllAtletas();
             });
 
+            // Menú hamburguesa
             document.getElementById('menuToggle').addEventListener('click', function() {
                 document.getElementById('navLinks').classList.toggle('open');
             });
 
+            // Música
             musicToggle.addEventListener('click', toggleMusic);
             document.addEventListener('click', function initAudio() {
                 if (!audio) {
@@ -2259,8 +2274,12 @@
             console.log('📸 Slider con ' + SLIDER_IMAGES.length + ' imágenes');
             console.log('🎬 Video: ' + VIDEO_URL);
             console.log('🎵 Música: ' + MUSIC_URL);
+
             actualizarSelectores();
 
+            // ============================================================
+            // 25. INICIALIZAR CON AUTENTICACIÓN
+            // ============================================================
             auth.onAuthStateChanged((user) => {
                 if (user) {
                     adminLogged = true;
@@ -2272,6 +2291,9 @@
                         iniciarEscuchaCategorias();
                         iniciarEscuchaDisciplinas();
                         mostrarExito('✅ Conectado como: ' + user.email);
+                    }).catch(err => {
+                        console.error('Error en inicialización:', err);
+                        mostrarError('Error al inicializar: ' + err.message);
                     });
                 } else {
                     adminLogged = false;
