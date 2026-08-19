@@ -1262,11 +1262,53 @@
             const db = firebase.firestore();
             const auth = firebase.auth();
 
-            db.enablePersistence({ synchronizeTabs: true })
-                .catch(err => console.warn('⚠️ Persistencia no disponible:', err));
+            // ============================================================
+            // 4. DOM REFERENCES CON VERIFICACIÓN DE EXISTENCIA
+            // ============================================================
+            const $ = (sel) => document.querySelector(sel);
+            const $$ = (sel) => document.querySelectorAll(sel);
+
+            // Función segura para obtener elementos
+            function getElement(id) {
+                const el = document.getElementById(id);
+                if (!el) {
+                    console.warn(`⚠️ Elemento con ID "${id}" no encontrado`);
+                }
+                return el;
+            }
+
+            // Verificar elementos críticos antes de usarlos
+            function verificarElementos() {
+                const elementosRequeridos = [
+                    'atletasGrid', 'atletasListaCompleta', 'sliderTrack', 'sliderDots',
+                    'adminLogin', 'adminContent', 'regNombre', 'regApellido', 'regEdad',
+                    'regZona', 'regCategoria', 'regDisciplina', 'regFoto', 'btnRegistrarAtleta',
+                    'msgRegistro', 'registroLoading', 'inputCategoria', 'inputDisciplina',
+                    'btnAddCategoria', 'btnAddDisciplina', 'listaAdminAtletas',
+                    'btnDescargarPDF', 'btnDescargarWord', 'zonaDescarga', 'mainVideo',
+                    'musicToggle', 'filtroBuscar', 'filtroZona', 'btnFiltrar',
+                    'btnLimpiarFiltros', 'filtroBuscar2', 'filtroZona2', 'btnFiltrar2',
+                    'btnLimpiarFiltros2', 'adminEmail', 'adminClave', 'btnLoginAdmin',
+                    'loginError', 'loginLoading', 'adminUserEmail', 'btnLogout',
+                    'listaCategoriasAdmin', 'listaDisciplinasAdmin',
+                    'listaCategoriasDisplay', 'listaDisciplinasDisplay'
+                ];
+
+                let faltantes = [];
+                elementosRequeridos.forEach(id => {
+                    if (!document.getElementById(id)) {
+                        faltantes.push(id);
+                    }
+                });
+
+                if (faltantes.length > 0) {
+                    console.warn('⚠️ Elementos faltantes:', faltantes);
+                }
+                return faltantes.length === 0;
+            }
 
             // ============================================================
-            // 4. VARIABLES GLOBALES
+            // 5. VARIABLES GLOBALES
             // ============================================================
             let atletas = [];
             let categorias = [];
@@ -1281,11 +1323,8 @@
             const FOTO_DEFAULT = 'https://via.placeholder.com/1920x1080/0a0a0a/00b4d8?text=Atleta+AVCS';
 
             // ============================================================
-            // 5. DOM REFERENCES
+            // 6. OBTENER ELEMENTOS CON VERIFICACIÓN
             // ============================================================
-            const $ = (sel) => document.querySelector(sel);
-            const $$ = (sel) => document.querySelectorAll(sel);
-
             const pages = {
                 inicio: document.getElementById('page-inicio'),
                 atletas: document.getElementById('page-atletas'),
@@ -1350,7 +1389,7 @@
             const btnLimpiarFiltros2 = document.getElementById('btnLimpiarFiltros2');
 
             // ============================================================
-            // 6. FUNCIÓN PARA SUBIR IMAGEN A CLOUDINARY
+            // 7. FUNCIÓN PARA SUBIR IMAGEN A CLOUDINARY
             // ============================================================
             async function subirImagenCloudinary(file) {
                 const formData = new FormData();
@@ -1380,7 +1419,7 @@
             }
 
             // ============================================================
-            // 7. FUNCIÓN PARA MOSTRAR ERRORES Y ÉXITOS
+            // 8. FUNCIÓN PARA MOSTRAR ERRORES Y ÉXITOS
             // ============================================================
             function mostrarError(mensaje) {
                 const container = document.querySelector('.admin-panel') || document.body;
@@ -1402,7 +1441,7 @@
             }
 
             // ============================================================
-            // 8. INICIALIZAR CATEGORÍAS Y DISCIPLINAS
+            // 9. INICIALIZAR CATEGORÍAS Y DISCIPLINAS
             // ============================================================
             async function inicializarConfiguracion() {
                 try {
@@ -1438,7 +1477,7 @@
             }
 
             // ============================================================
-            // 9. ESCUCHA EN TIEMPO REAL - ATLETAS
+            // 10. ESCUCHA EN TIEMPO REAL - ATLETAS
             // ============================================================
             function iniciarEscuchaAtletas() {
                 if (listaAtletasUnsubscribe) {
@@ -1481,7 +1520,7 @@
             }
 
             // ============================================================
-            // 10. ESCUCHA EN TIEMPO REAL - CATEGORÍAS Y DISCIPLINAS
+            // 11. ESCUCHA EN TIEMPO REAL - CATEGORÍAS Y DISCIPLINAS
             // ============================================================
             function iniciarEscuchaCategorias() {
                 if (categoriasUnsubscribe) {
@@ -1520,7 +1559,7 @@
             }
 
             // ============================================================
-            // 11. RENDER LISTA DE CATEGORÍAS/DISCIPLINAS EN ADMIN
+            // 12. RENDER LISTA DE CATEGORÍAS/DISCIPLINAS EN ADMIN
             // ============================================================
             function renderListaConfigAdmin() {
                 // Categorías
@@ -1587,7 +1626,7 @@
             }
 
             // ============================================================
-            // 12. ELIMINAR CATEGORÍA / DISCIPLINA
+            // 13. ELIMINAR CATEGORÍA / DISCIPLINA
             // ============================================================
             async function eliminarCategoria(index) {
                 const nombre = categorias[index];
@@ -1616,7 +1655,7 @@
             }
 
             // ============================================================
-            // 13. RENDER ATLETAS
+            // 14. RENDER ATLETAS
             // ============================================================
             function getAtletasFiltrados(buscar, zona) {
                 let filtrados = [...atletas];
@@ -1692,19 +1731,19 @@
             }
 
             function renderAllAtletas() {
-                const buscar1 = filtroBuscar.value;
-                const zona1 = filtroZona.value;
+                const buscar1 = filtroBuscar ? filtroBuscar.value : '';
+                const zona1 = filtroZona ? filtroZona.value : 'todas';
                 const filtrados1 = getAtletasFiltrados(buscar1, zona1);
                 renderAtletas(atletasGrid, filtrados1, true);
 
-                const buscar2 = filtroBuscar2.value;
-                const zona2 = filtroZona2.value;
+                const buscar2 = filtroBuscar2 ? filtroBuscar2.value : '';
+                const zona2 = filtroZona2 ? filtroZona2.value : 'todas';
                 const filtrados2 = getAtletasFiltrados(buscar2, zona2);
                 renderAtletas(atletasListaCompleta, filtrados2, true);
             }
 
             // ============================================================
-            // 14. RENDER LISTA ADMIN
+            // 15. RENDER LISTA ADMIN
             // ============================================================
             function renderListaAdmin() {
                 if (!listaAdminAtletas) return;
@@ -1750,15 +1789,15 @@
             }
 
             // ============================================================
-            // 15. CRUD CON FIREBASE + CLOUDINARY
+            // 16. CRUD CON FIREBASE + CLOUDINARY
             // ============================================================
             async function registrarAtleta() {
-                const nombre = regNombre.value.trim();
-                const apellido = regApellido.value.trim();
-                const edad = parseInt(regEdad.value);
-                const zona = regZona.value;
-                const categoria = regCategoria.value;
-                const disciplina = regDisciplina.value;
+                const nombre = regNombre ? regNombre.value.trim() : '';
+                const apellido = regApellido ? regApellido.value.trim() : '';
+                const edad = parseInt(regEdad ? regEdad.value : 0);
+                const zona = regZona ? regZona.value : 'Zona 1';
+                const categoria = regCategoria ? regCategoria.value : '';
+                const disciplina = regDisciplina ? regDisciplina.value : '';
 
                 // VALIDACIONES
                 if (!nombre || !apellido) {
@@ -1774,14 +1813,14 @@
                     return;
                 }
 
-                btnRegistrar.disabled = true;
-                registroLoading.style.display = 'block';
-                msgRegistro.classList.add('hidden');
+                if (btnRegistrar) btnRegistrar.disabled = true;
+                if (registroLoading) registroLoading.style.display = 'block';
+                if (msgRegistro) msgRegistro.classList.add('hidden');
 
                 try {
                     let fotoUrl = FOTO_DEFAULT;
 
-                    if (regFoto.files && regFoto.files.length > 0) {
+                    if (regFoto && regFoto.files && regFoto.files.length > 0) {
                         const file = regFoto.files[0];
                         fotoUrl = await subirImagenCloudinary(file);
                         console.log('📸 Foto subida a Cloudinary:', fotoUrl);
@@ -1803,7 +1842,7 @@
                         mostrarMsgRegistro('✅ Atleta actualizado correctamente.', 'success');
                         mostrarExito('Atleta actualizado correctamente');
                         editandoId = null;
-                        btnRegistrar.innerHTML = '<i class="fas fa-save"></i> Guardar Atleta';
+                        if (btnRegistrar) btnRegistrar.innerHTML = '<i class="fas fa-save"></i> Guardar Atleta';
                     } else {
                         const docRef = await db.collection('atletas').add(data);
                         console.log('📝 Atleta creado con ID:', docRef.id);
@@ -1818,8 +1857,8 @@
                     mostrarMsgRegistro('❌ Error: ' + error.message, 'error');
                     mostrarError('Error al guardar atleta: ' + error.message);
                 } finally {
-                    btnRegistrar.disabled = false;
-                    registroLoading.style.display = 'none';
+                    if (btnRegistrar) btnRegistrar.disabled = false;
+                    if (registroLoading) registroLoading.style.display = 'none';
                 }
             }
 
@@ -1838,41 +1877,44 @@
                 if (!atleta) return;
 
                 editandoId = id;
-                regNombre.value = atleta.nombre || '';
-                regApellido.value = atleta.apellido || '';
-                regEdad.value = atleta.edad || '';
-                regZona.value = atleta.zona || 'Zona 1';
-                regCategoria.value = atleta.categoria || '';
-                regDisciplina.value = atleta.disciplina || '';
+                if (regNombre) regNombre.value = atleta.nombre || '';
+                if (regApellido) regApellido.value = atleta.apellido || '';
+                if (regEdad) regEdad.value = atleta.edad || '';
+                if (regZona) regZona.value = atleta.zona || 'Zona 1';
+                if (regCategoria) regCategoria.value = atleta.categoria || '';
+                if (regDisciplina) regDisciplina.value = atleta.disciplina || '';
 
-                if (atleta.foto && atleta.foto !== FOTO_DEFAULT) {
-                    previewFoto.style.display = 'block';
-                    fotoPreviewImg.src = atleta.foto;
-                } else {
-                    previewFoto.style.display = 'none';
+                if (previewFoto && fotoPreviewImg) {
+                    if (atleta.foto && atleta.foto !== FOTO_DEFAULT) {
+                        previewFoto.style.display = 'block';
+                        fotoPreviewImg.src = atleta.foto;
+                    } else {
+                        previewFoto.style.display = 'none';
+                    }
                 }
 
-                btnRegistrar.innerHTML = '<i class="fas fa-sync-alt"></i> Actualizar Atleta';
+                if (btnRegistrar) btnRegistrar.innerHTML = '<i class="fas fa-sync-alt"></i> Actualizar Atleta';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 mostrarExito('Editando atleta: ' + atleta.nombre + ' ' + atleta.apellido);
             }
 
             function limpiarFormulario() {
-                regNombre.value = '';
-                regApellido.value = '';
-                regEdad.value = '';
-                regZona.value = 'Zona 1';
-                regFoto.value = '';
-                previewFoto.style.display = 'none';
+                if (regNombre) regNombre.value = '';
+                if (regApellido) regApellido.value = '';
+                if (regEdad) regEdad.value = '';
+                if (regZona) regZona.value = 'Zona 1';
+                if (regFoto) regFoto.value = '';
+                if (previewFoto) previewFoto.style.display = 'none';
                 fotoSeleccionada = null;
                 editandoId = null;
-                btnRegistrar.innerHTML = '<i class="fas fa-save"></i> Guardar Atleta';
-                msgRegistro.classList.add('hidden');
-                registroLoading.style.display = 'none';
-                btnRegistrar.disabled = false;
+                if (btnRegistrar) btnRegistrar.innerHTML = '<i class="fas fa-save"></i> Guardar Atleta';
+                if (msgRegistro) msgRegistro.classList.add('hidden');
+                if (registroLoading) registroLoading.style.display = 'none';
+                if (btnRegistrar) btnRegistrar.disabled = false;
             }
 
             function mostrarMsgRegistro(texto, tipo = 'success') {
+                if (!msgRegistro) return;
                 msgRegistro.textContent = texto;
                 msgRegistro.className = 'msg ' + (tipo === 'error' ? 'msg-error' : '');
                 msgRegistro.classList.remove('hidden');
@@ -1880,68 +1922,79 @@
             }
 
             // ============================================================
-            // 16. PREVISUALIZACIÓN DE FOTO
+            // 17. PREVISUALIZACIÓN DE FOTO
             // ============================================================
-            regFoto.addEventListener('change', function(e) {
-                const file = this.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(ev) {
-                        fotoSeleccionada = ev.target.result;
-                        previewFoto.style.display = 'block';
-                        fotoPreviewImg.src = fotoSeleccionada;
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    previewFoto.style.display = 'none';
-                    fotoSeleccionada = null;
-                }
-            });
-
-            // ============================================================
-            // 17. SELECTORES
-            // ============================================================
-            function actualizarSelectores() {
-                // Categorías
-                regCategoria.innerHTML = '';
-                if (categorias.length > 0) {
-                    categorias.forEach(c => {
-                        const opt = document.createElement('option');
-                        opt.value = c;
-                        opt.textContent = c;
-                        regCategoria.appendChild(opt);
-                    });
-                } else {
-                    const opt = document.createElement('option');
-                    opt.value = '';
-                    opt.textContent = 'Sin categorías';
-                    regCategoria.appendChild(opt);
-                }
-
-                // Disciplinas
-                regDisciplina.innerHTML = '';
-                if (disciplinas.length > 0) {
-                    disciplinas.forEach(d => {
-                        const opt = document.createElement('option');
-                        opt.value = d;
-                        opt.textContent = d;
-                        regDisciplina.appendChild(opt);
-                    });
-                } else {
-                    const opt = document.createElement('option');
-                    opt.value = '';
-                    opt.textContent = 'Sin disciplinas';
-                    regDisciplina.appendChild(opt);
-                }
-
-                listaCategoriasDisplay.textContent = categorias.length ? categorias.join(', ') : 'Ninguna';
-                listaDisciplinasDisplay.textContent = disciplinas.length ? disciplinas.join(', ') : 'Ninguna';
+            if (regFoto) {
+                regFoto.addEventListener('change', function(e) {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(ev) {
+                            fotoSeleccionada = ev.target.result;
+                            if (previewFoto) previewFoto.style.display = 'block';
+                            if (fotoPreviewImg) fotoPreviewImg.src = fotoSeleccionada;
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        if (previewFoto) previewFoto.style.display = 'none';
+                        fotoSeleccionada = null;
+                    }
+                });
             }
 
             // ============================================================
-            // 18. AGREGAR CATEGORÍA / DISCIPLINA
+            // 18. SELECTORES
+            // ============================================================
+            function actualizarSelectores() {
+                // Categorías
+                if (regCategoria) {
+                    regCategoria.innerHTML = '';
+                    if (categorias.length > 0) {
+                        categorias.forEach(c => {
+                            const opt = document.createElement('option');
+                            opt.value = c;
+                            opt.textContent = c;
+                            regCategoria.appendChild(opt);
+                        });
+                    } else {
+                        const opt = document.createElement('option');
+                        opt.value = '';
+                        opt.textContent = 'Sin categorías';
+                        regCategoria.appendChild(opt);
+                    }
+                }
+
+                // Disciplinas
+                if (regDisciplina) {
+                    regDisciplina.innerHTML = '';
+                    if (disciplinas.length > 0) {
+                        disciplinas.forEach(d => {
+                            const opt = document.createElement('option');
+                            opt.value = d;
+                            opt.textContent = d;
+                            regDisciplina.appendChild(opt);
+                        });
+                    } else {
+                        const opt = document.createElement('option');
+                        opt.value = '';
+                        opt.textContent = 'Sin disciplinas';
+                        regDisciplina.appendChild(opt);
+                    }
+                }
+
+                if (listaCategoriasDisplay) {
+                    listaCategoriasDisplay.textContent = categorias.length ? categorias.join(', ') : 'Ninguna';
+                }
+                if (listaDisciplinasDisplay) {
+                    listaDisciplinasDisplay.textContent = disciplinas.length ? disciplinas.join(', ') : 'Ninguna';
+                }
+            }
+
+            // ============================================================
+            // 19. AGREGAR CATEGORÍA / DISCIPLINA
             // ============================================================
             async function agregarCategoria() {
+                if (!inputCategoria) return;
                 const val = inputCategoria.value.trim();
                 if (!val) { alert('Ingresa un nombre válido.'); return; }
                 if (categorias.includes(val)) { alert('La categoría ya existe.'); return; }
@@ -1957,6 +2010,7 @@
             }
 
             async function agregarDisciplina() {
+                if (!inputDisciplina) return;
                 const val = inputDisciplina.value.trim();
                 if (!val) { alert('Ingresa un nombre válido.'); return; }
                 if (disciplinas.includes(val)) { alert('La disciplina ya existe.'); return; }
@@ -1972,11 +2026,13 @@
             }
 
             // ============================================================
-            // 19. SLIDER
+            // 20. SLIDER
             // ============================================================
             let sliderIndex = 0;
 
             function initSlider() {
+                if (!sliderTrack || !sliderDots) return;
+                
                 sliderTrack.innerHTML = '';
                 SLIDER_IMAGES.forEach((url) => {
                     const img = document.createElement('img');
@@ -1998,76 +2054,87 @@
             }
 
             function goToSlide(index) {
+                if (!sliderTrack) return;
                 const total = SLIDER_IMAGES.length;
                 if (index < 0) index = total - 1;
                 if (index >= total) index = 0;
                 sliderIndex = index;
                 sliderTrack.style.transform = `translateX(-${index * 100}%)`;
-                document.querySelectorAll('.slider-dots span').forEach((dot, i) => {
-                    dot.classList.toggle('active', i === index);
-                });
+                if (sliderDots) {
+                    document.querySelectorAll('.slider-dots span').forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
+                }
             }
 
             function nextSlide() { goToSlide(sliderIndex + 1); }
             function prevSlide() { goToSlide(sliderIndex - 1); }
 
             // ============================================================
-            // 20. NAVEGACIÓN
+            // 21. NAVEGACIÓN
             // ============================================================
             function navigateTo(page) {
                 Object.keys(pages).forEach(key => {
-                    pages[key].classList.toggle('hidden', key !== page);
+                    if (pages[key]) {
+                        pages[key].classList.toggle('hidden', key !== page);
+                    }
                 });
                 navLinks.forEach(link => {
                     link.classList.toggle('active', link.dataset.page === page);
                 });
                 if (page === 'admin') {
                     if (adminLogged) {
-                        adminLogin.classList.add('hidden');
-                        adminContent.classList.remove('hidden');
+                        if (adminLogin) adminLogin.classList.add('hidden');
+                        if (adminContent) adminContent.classList.remove('hidden');
                     } else {
-                        adminLogin.classList.remove('hidden');
-                        adminContent.classList.add('hidden');
+                        if (adminLogin) adminLogin.classList.remove('hidden');
+                        if (adminContent) adminContent.classList.add('hidden');
                     }
                 }
-                document.getElementById('navLinks').classList.remove('open');
+                const navLinksEl = document.getElementById('navLinks');
+                if (navLinksEl) navLinksEl.classList.remove('open');
             }
 
             // ============================================================
-            // 21. AUTENTICACIÓN
+            // 22. AUTENTICACIÓN
             // ============================================================
             async function loginAdmin() {
+                if (!adminEmail || !adminClave) return;
                 const email = adminEmail.value.trim();
                 const password = adminClave.value.trim();
 
                 if (!email || !password) {
-                    loginError.textContent = 'Ingresa email y contraseña.';
-                    loginError.classList.remove('hidden');
+                    if (loginError) {
+                        loginError.textContent = 'Ingresa email y contraseña.';
+                        loginError.classList.remove('hidden');
+                    }
                     return;
                 }
 
-                loginLoading.style.display = 'block';
-                btnLogin.disabled = true;
-                loginError.classList.add('hidden');
+                if (loginLoading) loginLoading.style.display = 'block';
+                if (btnLogin) btnLogin.disabled = true;
+                if (loginError) loginError.classList.add('hidden');
 
                 try {
                     await auth.signInWithEmailAndPassword(email, password);
                     adminLogged = true;
-                    adminLogin.classList.add('hidden');
-                    adminContent.classList.remove('hidden');
-                    adminUserEmail.textContent = email;
-                    loginLoading.style.display = 'none';
-                    btnLogin.disabled = false;
+                    if (adminLogin) adminLogin.classList.add('hidden');
+                    if (adminContent) adminContent.classList.remove('hidden');
+                    if (adminUserEmail) adminUserEmail.textContent = email;
+                    if (loginLoading) loginLoading.style.display = 'none';
+                    if (btnLogin) btnLogin.disabled = false;
                     await inicializarConfiguracion();
                     iniciarEscuchaAtletas();
                     iniciarEscuchaCategorias();
                     iniciarEscuchaDisciplinas();
                     mostrarExito('✅ Sesión iniciada correctamente');
                 } catch (error) {
-                    loginLoading.style.display = 'none';
-                    btnLogin.disabled = false;
-                    loginError.textContent = '❌ Error: ' + error.message;
-                    loginError.classList.remove('hidden');
+                    if (loginLoading) loginLoading.style.display = 'none';
+                    if (btnLogin) btnLogin.disabled = false;
+                    if (loginError) {
+                        loginError.textContent = '❌ Error: ' + error.message;
+                        loginError.classList.remove('hidden');
+                    }
                     console.error('Login error:', error);
                 }
             }
@@ -2076,8 +2143,8 @@
                 try {
                     await auth.signOut();
                     adminLogged = false;
-                    adminLogin.classList.remove('hidden');
-                    adminContent.classList.add('hidden');
+                    if (adminLogin) adminLogin.classList.remove('hidden');
+                    if (adminContent) adminContent.classList.add('hidden');
                     if (listaAtletasUnsubscribe) {
                         listaAtletasUnsubscribe();
                         listaAtletasUnsubscribe = null;
@@ -2099,10 +2166,10 @@
             }
 
             // ============================================================
-            // 22. DESCARGAS
+            // 23. DESCARGAS
             // ============================================================
             function getAtletasParaDescarga() {
-                const zona = zonaDescarga.value;
+                const zona = zonaDescarga ? zonaDescarga.value : 'todas';
                 if (zona === 'todas') return atletas;
                 return atletas.filter(a => a.zona === zona);
             }
@@ -2110,7 +2177,7 @@
             function descargarPDF() {
                 const lista = getAtletasParaDescarga();
                 if (lista.length === 0) { alert('No hay atletas en esta zona para descargar.'); return; }
-                const zona = zonaDescarga.value === 'todas' ? 'TODAS LAS ZONAS' : zonaDescarga.value;
+                const zona = zonaDescarga && zonaDescarga.value === 'todas' ? 'TODAS LAS ZONAS' : (zonaDescarga ? zonaDescarga.value : 'TODAS');
                 const ventana = window.open('', '_blank');
                 if (!ventana) { alert('Permite ventanas emergentes.'); return; }
                 ventana.document.write(`
@@ -2123,7 +2190,7 @@
                         strong{color:#00b4d8;}
                     </style>
                     </head><body>
-                    <h1>🏆 OLIMPIADAS 2026 AVCS</h1>
+                    <h1>🔥 OLIMPIADAS 2026 AVCS</h1>
                     <h2>Listado de Atletas - ${zona}</h2>
                     ${lista.map(a => `
                         <div class="atleta">
@@ -2142,7 +2209,7 @@
             function descargarWord() {
                 const lista = getAtletasParaDescarga();
                 if (lista.length === 0) { alert('No hay atletas en esta zona para descargar.'); return; }
-                const zona = zonaDescarga.value === 'todas' ? 'TODAS LAS ZONAS' : zonaDescarga.value;
+                const zona = zonaDescarga && zonaDescarga.value === 'todas' ? 'TODAS LAS ZONAS' : (zonaDescarga ? zonaDescarga.value : 'TODAS');
                 let texto = `=== OLIMPIADAS 2026 AVCS - LISTADO DE ATLETAS ===\n`;
                 texto += `=== ZONA: ${zona} ===\n\n`;
                 lista.forEach((a, i) => {
@@ -2162,7 +2229,7 @@
             }
 
             // ============================================================
-            // 23. MÚSICA
+            // 24. MÚSICA
             // ============================================================
             let audio = null;
             let musicPlaying = false;
@@ -2176,33 +2243,38 @@
                 if (musicPlaying) {
                     audio.pause();
                     musicPlaying = false;
-                    musicToggle.innerHTML = '<i class="fas fa-music"></i>';
-                    musicToggle.classList.remove('playing');
+                    if (musicToggle) musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+                    if (musicToggle) musicToggle.classList.remove('playing');
                 } else {
                     audio.play().catch(() => {
                         alert('Haz clic en la página para activar la música.');
                     });
                     musicPlaying = true;
-                    musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
-                    musicToggle.classList.add('playing');
+                    if (musicToggle) musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+                    if (musicToggle) musicToggle.classList.add('playing');
                 }
             }
 
             // ============================================================
-            // 24. EVENTOS E INICIO
+            // 25. EVENTOS E INICIO
             // ============================================================
+
+            // Verificar elementos antes de iniciar
+            verificarElementos();
 
             // Inicializar slider
             initSlider();
-            sliderPrev.addEventListener('click', prevSlide);
-            sliderNext.addEventListener('click', nextSlide);
+            if (sliderPrev) sliderPrev.addEventListener('click', prevSlide);
+            if (sliderNext) sliderNext.addEventListener('click', nextSlide);
             let sliderInterval = setInterval(nextSlide, 6000);
             const sliderContainer = document.getElementById('sliderContainer');
-            sliderContainer.addEventListener('mouseenter', () => clearInterval(sliderInterval));
-            sliderContainer.addEventListener('mouseleave', () => {
-                clearInterval(sliderInterval);
-                sliderInterval = setInterval(nextSlide, 6000);
-            });
+            if (sliderContainer) {
+                sliderContainer.addEventListener('mouseenter', () => clearInterval(sliderInterval));
+                sliderContainer.addEventListener('mouseleave', () => {
+                    clearInterval(sliderInterval);
+                    sliderInterval = setInterval(nextSlide, 6000);
+                });
+            }
 
             // Video
             if (mainVideo) {
@@ -2219,46 +2291,54 @@
             });
 
             // Login
-            btnLogin.addEventListener('click', loginAdmin);
-            adminEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginAdmin(); });
-            adminClave.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginAdmin(); });
-            btnLogout.addEventListener('click', logoutAdmin);
+            if (btnLogin) btnLogin.addEventListener('click', loginAdmin);
+            if (adminEmail) adminEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginAdmin(); });
+            if (adminClave) adminClave.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginAdmin(); });
+            if (btnLogout) btnLogout.addEventListener('click', logoutAdmin);
 
             // Registrar
-            btnRegistrar.addEventListener('click', registrarAtleta);
+            if (btnRegistrar) btnRegistrar.addEventListener('click', registrarAtleta);
 
             // Agregar categoría / disciplina
-            btnAddCategoria.addEventListener('click', agregarCategoria);
-            btnAddDisciplina.addEventListener('click', agregarDisciplina);
+            if (btnAddCategoria) btnAddCategoria.addEventListener('click', agregarCategoria);
+            if (btnAddDisciplina) btnAddDisciplina.addEventListener('click', agregarDisciplina);
 
             // Descargas
-            btnPDF.addEventListener('click', descargarPDF);
-            btnWord.addEventListener('click', descargarWord);
+            if (btnPDF) btnPDF.addEventListener('click', descargarPDF);
+            if (btnWord) btnWord.addEventListener('click', descargarWord);
 
             // Filtros
             function aplicarFiltros() {
                 renderAllAtletas();
             }
-            btnFiltrar.addEventListener('click', aplicarFiltros);
-            btnFiltrar2.addEventListener('click', aplicarFiltros);
-            btnLimpiarFiltros.addEventListener('click', function() {
-                filtroBuscar.value = '';
-                filtroZona.value = 'todas';
-                renderAllAtletas();
-            });
-            btnLimpiarFiltros2.addEventListener('click', function() {
-                filtroBuscar2.value = '';
-                filtroZona2.value = 'todas';
-                renderAllAtletas();
-            });
+            if (btnFiltrar) btnFiltrar.addEventListener('click', aplicarFiltros);
+            if (btnFiltrar2) btnFiltrar2.addEventListener('click', aplicarFiltros);
+            if (btnLimpiarFiltros) {
+                btnLimpiarFiltros.addEventListener('click', function() {
+                    if (filtroBuscar) filtroBuscar.value = '';
+                    if (filtroZona) filtroZona.value = 'todas';
+                    renderAllAtletas();
+                });
+            }
+            if (btnLimpiarFiltros2) {
+                btnLimpiarFiltros2.addEventListener('click', function() {
+                    if (filtroBuscar2) filtroBuscar2.value = '';
+                    if (filtroZona2) filtroZona2.value = 'todas';
+                    renderAllAtletas();
+                });
+            }
 
             // Menú hamburguesa
-            document.getElementById('menuToggle').addEventListener('click', function() {
-                document.getElementById('navLinks').classList.toggle('open');
-            });
+            const menuToggle = document.getElementById('menuToggle');
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    const nav = document.getElementById('navLinks');
+                    if (nav) nav.classList.toggle('open');
+                });
+            }
 
             // Música
-            musicToggle.addEventListener('click', toggleMusic);
+            if (musicToggle) musicToggle.addEventListener('click', toggleMusic);
             document.addEventListener('click', function initAudio() {
                 if (!audio) {
                     audio = new Audio(MUSIC_URL);
@@ -2272,20 +2352,18 @@
             console.log('🔥 Usando icono de llama');
             console.log('📸 Cloudinary configurado correctamente');
             console.log('📸 Slider con ' + SLIDER_IMAGES.length + ' imágenes');
-            console.log('🎬 Video: ' + VIDEO_URL);
-            console.log('🎵 Música: ' + MUSIC_URL);
 
             actualizarSelectores();
 
             // ============================================================
-            // 25. INICIALIZAR CON AUTENTICACIÓN
+            // 26. INICIALIZAR CON AUTENTICACIÓN
             // ============================================================
             auth.onAuthStateChanged((user) => {
                 if (user) {
                     adminLogged = true;
-                    adminLogin.classList.add('hidden');
-                    adminContent.classList.remove('hidden');
-                    adminUserEmail.textContent = user.email;
+                    if (adminLogin) adminLogin.classList.add('hidden');
+                    if (adminContent) adminContent.classList.remove('hidden');
+                    if (adminUserEmail) adminUserEmail.textContent = user.email;
                     inicializarConfiguracion().then(() => {
                         iniciarEscuchaAtletas();
                         iniciarEscuchaCategorias();
@@ -2297,8 +2375,8 @@
                     });
                 } else {
                     adminLogged = false;
-                    adminLogin.classList.remove('hidden');
-                    adminContent.classList.add('hidden');
+                    if (adminLogin) adminLogin.classList.remove('hidden');
+                    if (adminContent) adminContent.classList.add('hidden');
                     iniciarEscuchaAtletas();
                 }
             });
