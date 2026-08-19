@@ -1298,8 +1298,8 @@
                 } catch (error) {
                     console.error('Error inicializando configuraciones:', error);
                     mostrarError('Error al cargar configuraciones: ' + error.message);
-                    categorias = ['Sub-13', 'Sub-15', 'Sub-17', 'Sub-20', 'Abierta'];
-                    disciplinas = ['100m', '200m', '400m', 'Salto Largo', 'Salto Alto', 'Lanzamiento Bala'];
+                    categorias =['Infantil 7 a 9 años', 'Infantil / Junior 10 a 12 años', 'Juvenil B 13 a 15 años', 'Juvenil A 16 a 18 años', 'Adultos Libres Mayor de 18 años'];
+                    disciplinas =  ['20 MTS', '50 MTS', '100 MTS', '200 MTS', '400 MTS', '5K', 'LANZAMIENTO DE BOLA', 'FUTSAL', 'VOLEIBOL'];
                     actualizarSelectores();
                 }
             }
@@ -1356,7 +1356,7 @@
                         if (doc.exists) {
                             categorias = doc.data().lista || [];
                         } else {
-                            categorias = ['Sub-13', 'Sub-15', 'Sub-17', 'Sub-20', 'Abierta'];
+                            categorias =  ['20 MTS', '50 MTS', '100 MTS', '200 MTS', '400 MTS', '5K', 'LANZAMIENTO DE BOLA', 'FUTSAL', 'VOLEIBOL'];
                         }
                         actualizarSelectores();
                     }, (error) => {
@@ -1373,7 +1373,7 @@
                         if (doc.exists) {
                             disciplinas = doc.data().lista || [];
                         } else {
-                            disciplinas = ['100m', '200m', '400m', 'Salto Largo', 'Salto Alto', 'Lanzamiento Bala'];
+                            disciplinas = ['20 MTS', '50 MTS', '100 MTS', '200 MTS', '400 MTS', '5K', 'LANZAMIENTO DE BOLA', 'FUTSAL', 'VOLEIBOL'];
                         }
                         actualizarSelectores();
                     }, (error) => {
