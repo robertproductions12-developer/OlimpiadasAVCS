@@ -1077,8 +1077,8 @@
             <div>
                 <h4><i class="fas fa-users"></i> Encargados</h4>
                 <ul>
-                    <li><strong>Coordinador:</strong> Juan Pérez</li>
-                    <li><strong>Líder Juvenil:</strong> María Gómez</li>
+                    <li><strong>Coordinador:</strong> Javier Parra</li>
+                    <li><strong>Líder Juvenil:</strong> Jesús Utrera</li>
                 </ul>
             </div>
             <div>
@@ -1277,7 +1277,7 @@
                 try {
                     const catDoc = await db.collection('configuracion').doc('categorias').get();
                     if (!catDoc.exists) {
-                        const defaultCategorias = ['Sub-13', 'Sub-15', 'Sub-17', 'Sub-20', 'Abierta'];
+                        const defaultCategorias = ['Infantil 7 a 9 años', 'Infantil / Junior 10 a 12 años', 'Juvenil B 13 a 15 años', 'Juvenil A 16 a 18 años', 'Adultos Libres Mayor de 18 años'];
                         await db.collection('configuracion').doc('categorias').set({ lista: defaultCategorias });
                         categorias = defaultCategorias;
                     } else {
@@ -1286,7 +1286,7 @@
 
                     const discDoc = await db.collection('configuracion').doc('disciplinas').get();
                     if (!discDoc.exists) {
-                        const defaultDisciplinas = ['100m', '200m', '400m', 'Salto Largo', 'Salto Alto', 'Lanzamiento Bala'];
+                        const defaultDisciplinas = ['20 MTS', '50 MTS', '100 MTS', '200 MTS', '400 MTS', '5K', 'LANZAMIENTO DE BOLA', 'FUTSAL', 'VOLEIBOL'];
                         await db.collection('configuracion').doc('disciplinas').set({ lista: defaultDisciplinas });
                         disciplinas = defaultDisciplinas;
                     } else {
