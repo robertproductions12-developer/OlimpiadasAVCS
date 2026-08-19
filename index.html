@@ -6,7 +6,7 @@
     <title>OLIMPIADAS 2026 AVCS</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
-    <!-- Google Fonts - Tipografía más profesional -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet"/>
     <style>
         /* ===== RESET Y ESTILOS GENERALES ===== */
@@ -113,6 +113,28 @@
             color: #00b4d8;
         }
 
+        /* ===== REDES SOCIALES EN EL MENÚ ===== */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-left: 1rem;
+        }
+        .social-links a {
+            color: #888;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            padding: 0.2rem 0.4rem;
+            border-bottom: none !important;
+        }
+        .social-links a:hover {
+            color: #00b4d8;
+            transform: scale(1.2);
+        }
+        .social-links a::after {
+            display: none !important;
+        }
+
         .menu-toggle {
             display: none;
             font-size: 1.8rem;
@@ -136,6 +158,13 @@
             }
             .nav-links.open {
                 display: flex;
+            }
+            .social-links {
+                margin-left: 0;
+                margin-top: 0.5rem;
+                width: 100%;
+                justify-content: flex-start;
+                gap: 1.5rem;
             }
             nav {
                 padding: 0.8rem 1.2rem;
@@ -527,6 +556,22 @@
             color: #00b4d8;
         }
 
+        /* ===== REDES SOCIALES EN FOOTER ===== */
+        .footer-social {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 0.5rem;
+        }
+        .footer-social a {
+            color: #888;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        .footer-social a:hover {
+            color: #00b4d8;
+            transform: scale(1.2);
+        }
+
         /* ===== PANEL ADMIN ===== */
         .admin-panel {
             background: rgba(20, 20, 20, 0.95);
@@ -718,6 +763,44 @@
             color: #c62828;
         }
 
+        /* ===== LISTA DE CATEGORÍAS/DISCIPLINAS EN ADMIN ===== */
+        .lista-config-admin {
+            margin-top: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 0.8rem;
+            border-radius: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 180, 216, 0.08);
+        }
+        .lista-config-admin .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.4rem 0.6rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.85rem;
+            color: #cccccc;
+        }
+        .lista-config-admin .item:last-child {
+            border-bottom: none;
+        }
+        .lista-config-admin .item .delete-item {
+            color: #c62828;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: color 0.3s;
+        }
+        .lista-config-admin .item .delete-item:hover {
+            color: #ef5350;
+        }
+        .lista-config-admin .empty-msg {
+            color: #666;
+            text-align: center;
+            padding: 0.8rem;
+            font-size: 0.85rem;
+        }
+
         /* ===== MENSAJES ===== */
         .msg {
             background: rgba(0, 119, 182, 0.15);
@@ -874,6 +957,13 @@
             <a href="#" class="active" data-page="inicio"><i class="fas fa-home"></i> Inicio</a>
             <a href="#" data-page="atletas"><i class="fas fa-users"></i> Atletas</a>
             <a href="#" data-page="admin"><i class="fas fa-user-shield"></i> Admin</a>
+            <!-- ===== REDES SOCIALES EN EL MENÚ ===== -->
+            <div class="social-links">
+                <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+            </div>
         </div>
     </nav>
 
@@ -925,7 +1015,7 @@
             <!-- VIDEO -->
             <div class="video-wrapper">
                 <video id="mainVideo" controls>
-                    <source src="video.mp4" type="video/mp4">
+                    <source src="" type="video/mp4">
                     Tu navegador no soporta el video.
                 </video>
             </div>
@@ -1011,7 +1101,7 @@
                             </div>
                         </div>
 
-                        <!-- CATEGORÍAS Y DISCIPLINAS -->
+                        <!-- CATEGORÍAS Y DISCIPLINAS - CON LISTA VISIBLE Y ELIMINAR -->
                         <div class="admin-card">
                             <h3><i class="fas fa-tags"></i> Categorías / Disciplinas</h3>
                             <label>Nueva Categoría</label>
@@ -1019,14 +1109,23 @@
                                 <input type="text" id="inputCategoria" placeholder="Ej: Sub-15" style="flex:1;">
                                 <button class="btn btn-sm" id="btnAddCategoria"><i class="fas fa-plus"></i> Agregar</button>
                             </div>
-                            <label>Nueva Disciplina</label>
+                            
+                            <!-- LISTA DE CATEGORÍAS -->
+                            <label style="margin-top:1rem;">Categorías existentes:</label>
+                            <div class="lista-config-admin" id="listaCategoriasAdmin">
+                                <div class="loader" style="width:20px;height:20px;"></div>
+                            </div>
+
+                            <label style="margin-top:1rem;">Nueva Disciplina</label>
                             <div style="display:flex; gap:6px; flex-wrap:wrap;">
                                 <input type="text" id="inputDisciplina" placeholder="Ej: 100m" style="flex:1;">
                                 <button class="btn btn-sm" id="btnAddDisciplina"><i class="fas fa-plus"></i> Agregar</button>
                             </div>
-                            <div style="margin-top:12px; font-size:0.8rem; color:#888;">
-                                <strong style="color:#00b4d8;">Categorías:</strong> <span id="listaCategoriasDisplay">Cargando...</span><br>
-                                <strong style="color:#00b4d8;">Disciplinas:</strong> <span id="listaDisciplinasDisplay">Cargando...</span>
+
+                            <!-- LISTA DE DISCIPLINAS -->
+                            <label style="margin-top:1rem;">Disciplinas existentes:</label>
+                            <div class="lista-config-admin" id="listaDisciplinasAdmin">
+                                <div class="loader" style="width:20px;height:20px;"></div>
                             </div>
                         </div>
 
@@ -1085,6 +1184,15 @@
                 <h4><i class="fas fa-bible"></i> Versículo</h4>
                 <p class="footer-verse">"Todo lo que hagáis, hacedlo de corazón, como para el Señor y no para los hombres." — Colosenses 3:23</p>
             </div>
+            <div>
+                <h4><i class="fas fa-share-alt"></i> Síguenos</h4>
+                <div class="footer-social">
+                    <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
         </div>
         <div class="footer-bottom">
             &copy; 2026 <strong>OLIMPIADAS AVCS</strong> - Todos los derechos reservados
@@ -1126,6 +1234,29 @@
                 uploadPreset: 'olimpiadas_preset'
             };
 
+            // ============================================================
+            // 3. 🔥🔥🔥 CAMBIA AQUÍ TUS IMÁGENES, VIDEO Y MÚSICA 🔥🔥🔥
+            // ============================================================
+            
+            // 📸 IMÁGENES DEL SLIDER - Reemplaza las URLs con tus imágenes
+            const SLIDER_IMAGES = [
+                'https://via.placeholder.com/1920x1080/0a0a0a/00b4d8?text=OLIMPIADAS+2026+-+Slide+1',
+                'https://via.placeholder.com/1920x1080/0a0a0a/0077b6?text=OLIMPIADAS+2026+-+Slide+2',
+                'https://via.placeholder.com/1920x1080/0a0a0a/00b4d8?text=OLIMPIADAS+2026+-+Slide+3',
+                'https://via.placeholder.com/1920x1080/0a0a0a/0077b6?text=OLIMPIADAS+2026+-+Slide+4',
+                'https://via.placeholder.com/1920x1080/0a0a0a/00b4d8?text=OLIMPIADAS+2026+-+Slide+5'
+            ];
+
+            // 🎬 VIDEO - Reemplaza con la URL de tu video MP4
+            const VIDEO_URL = 'video.mp4';
+
+            // 🎵 MÚSICA - Reemplaza con la URL de tu música MP3
+            const MUSIC_URL = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+
+            // ============================================================
+            // FIN DE LA ZONA DE PERSONALIZACIÓN
+            // ============================================================
+
             // Inicializar Firebase
             firebase.initializeApp(firebaseConfig);
             const db = firebase.firestore();
@@ -1135,7 +1266,7 @@
                 .catch(err => console.warn('Error de persistencia:', err));
 
             // ============================================================
-            // 3. VARIABLES GLOBALES
+            // 4. VARIABLES GLOBALES
             // ============================================================
             let atletas = [];
             let categorias = [];
@@ -1148,11 +1279,9 @@
             let disciplinasUnsubscribe = null;
 
             const FOTO_DEFAULT = 'https://via.placeholder.com/1920x1080/0a0a0a/00b4d8?text=Atleta+AVCS';
-            const VIDEO_URL = 'https://www.w3schools.com/html/mov_bbb.mp4';
-            const MUSIC_URL = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
 
             // ============================================================
-            // 4. DOM REFERENCES
+            // 5. DOM REFERENCES
             // ============================================================
             const $ = (sel) => document.querySelector(sel);
             const $$ = (sel) => document.querySelectorAll(sel);
@@ -1162,7 +1291,7 @@
                 atletas: document.getElementById('page-atletas'),
                 admin: document.getElementById('page-admin'),
             };
-            const navLinks = $$('.nav-links a');
+            const navLinks = $$('.nav-links a:not(.social-links a)');
             const atletasGrid = document.getElementById('atletasGrid');
             const atletasListaCompleta = document.getElementById('atletasListaCompleta');
 
@@ -1200,6 +1329,8 @@
             const btnAddDisciplina = document.getElementById('btnAddDisciplina');
             const listaCategoriasDisplay = document.getElementById('listaCategoriasDisplay');
             const listaDisciplinasDisplay = document.getElementById('listaDisciplinasDisplay');
+            const listaCategoriasAdmin = document.getElementById('listaCategoriasAdmin');
+            const listaDisciplinasAdmin = document.getElementById('listaDisciplinasAdmin');
 
             const listaAdminAtletas = document.getElementById('listaAdminAtletas');
             const btnPDF = document.getElementById('btnDescargarPDF');
@@ -1219,7 +1350,7 @@
             const btnLimpiarFiltros2 = document.getElementById('btnLimpiarFiltros2');
 
             // ============================================================
-            // 5. FUNCIÓN PARA SUBIR IMAGEN A CLOUDINARY
+            // 6. FUNCIÓN PARA SUBIR IMAGEN A CLOUDINARY
             // ============================================================
             async function subirImagenCloudinary(file) {
                 const formData = new FormData();
@@ -1249,7 +1380,7 @@
             }
 
             // ============================================================
-            // 6. FUNCIÓN PARA MOSTRAR ERRORES Y ÉXITOS
+            // 7. FUNCIÓN PARA MOSTRAR ERRORES Y ÉXITOS
             // ============================================================
             function mostrarError(mensaje) {
                 const container = document.querySelector('.admin-panel') || document.body;
@@ -1271,7 +1402,7 @@
             }
 
             // ============================================================
-            // 7. INICIALIZAR CATEGORÍAS Y DISCIPLINAS
+            // 8. INICIALIZAR CATEGORÍAS Y DISCIPLINAS
             // ============================================================
             async function inicializarConfiguracion() {
                 try {
@@ -1294,18 +1425,20 @@
                     }
 
                     actualizarSelectores();
+                    renderListaConfigAdmin();
 
                 } catch (error) {
                     console.error('Error inicializando configuraciones:', error);
                     mostrarError('Error al cargar configuraciones: ' + error.message);
-                    categorias =['Infantil 7 a 9 años', 'Infantil / Junior 10 a 12 años', 'Juvenil B 13 a 15 años', 'Juvenil A 16 a 18 años', 'Adultos Libres Mayor de 18 años'];
-                    disciplinas =  ['20 MTS', '50 MTS', '100 MTS', '200 MTS', '400 MTS', '5K', 'LANZAMIENTO DE BOLA', 'FUTSAL', 'VOLEIBOL'];
+                    categorias = ['Infantil 7 a 9 años', 'Infantil / Junior 10 a 12 años', 'Juvenil B 13 a 15 años', 'Juvenil A 16 a 18 años', 'Adultos Libres Mayor de 18 años'];
+                    disciplinas = ['20 MTS', '50 MTS', '100 MTS', '200 MTS', '400 MTS', '5K', 'LANZAMIENTO DE BOLA', 'FUTSAL', 'VOLEIBOL'];
                     actualizarSelectores();
+                    renderListaConfigAdmin();
                 }
             }
 
             // ============================================================
-            // 8. ESCUCHA EN TIEMPO REAL - ATLETAS
+            // 9. ESCUCHA EN TIEMPO REAL - ATLETAS
             // ============================================================
             function iniciarEscuchaAtletas() {
                 if (listaAtletasUnsubscribe) {
@@ -1345,7 +1478,7 @@
             }
 
             // ============================================================
-            // 9. ESCUCHA EN TIEMPO REAL - CATEGORÍAS Y DISCIPLINAS
+            // 10. ESCUCHA EN TIEMPO REAL - CATEGORÍAS Y DISCIPLINAS
             // ============================================================
             function iniciarEscuchaCategorias() {
                 if (categoriasUnsubscribe) {
@@ -1356,9 +1489,10 @@
                         if (doc.exists) {
                             categorias = doc.data().lista || [];
                         } else {
-                            categorias =  ['20 MTS', '50 MTS', '100 MTS', '200 MTS', '400 MTS', '5K', 'LANZAMIENTO DE BOLA', 'FUTSAL', 'VOLEIBOL'];
+                            categorias = ['Infantil 7 a 9 años', 'Infantil / Junior 10 a 12 años', 'Juvenil B 13 a 15 años', 'Juvenil A 16 a 18 años', 'Adultos Libres Mayor de 18 años'];
                         }
                         actualizarSelectores();
+                        renderListaConfigAdmin();
                     }, (error) => {
                         console.error('Error en escucha de categorías:', error);
                     });
@@ -1376,13 +1510,111 @@
                             disciplinas = ['20 MTS', '50 MTS', '100 MTS', '200 MTS', '400 MTS', '5K', 'LANZAMIENTO DE BOLA', 'FUTSAL', 'VOLEIBOL'];
                         }
                         actualizarSelectores();
+                        renderListaConfigAdmin();
                     }, (error) => {
                         console.error('Error en escucha de disciplinas:', error);
                     });
             }
 
             // ============================================================
-            // 10. RENDER ATLETAS
+            // 11. RENDER LISTA DE CATEGORÍAS/DISCIPLINAS EN ADMIN
+            // ============================================================
+            function renderListaConfigAdmin() {
+                // Categorías
+                if (listaCategoriasAdmin) {
+                    if (categorias.length === 0) {
+                        listaCategoriasAdmin.innerHTML = '<div class="empty-msg">No hay categorías registradas</div>';
+                    } else {
+                        let html = '';
+                        categorias.forEach((cat, index) => {
+                            html += `
+                                <div class="item">
+                                    <span>${cat}</span>
+                                    <span class="delete-item" data-tipo="categoria" data-index="${index}">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                </div>
+                            `;
+                        });
+                        listaCategoriasAdmin.innerHTML = html;
+                        // Eventos para eliminar
+                        listaCategoriasAdmin.querySelectorAll('.delete-item').forEach(el => {
+                            el.addEventListener('click', function() {
+                                const tipo = this.dataset.tipo;
+                                const index = parseInt(this.dataset.index);
+                                if (tipo === 'categoria') {
+                                    eliminarCategoria(index);
+                                } else {
+                                    eliminarDisciplina(index);
+                                }
+                            });
+                        });
+                    }
+                }
+
+                // Disciplinas
+                if (listaDisciplinasAdmin) {
+                    if (disciplinas.length === 0) {
+                        listaDisciplinasAdmin.innerHTML = '<div class="empty-msg">No hay disciplinas registradas</div>';
+                    } else {
+                        let html = '';
+                        disciplinas.forEach((disc, index) => {
+                            html += `
+                                <div class="item">
+                                    <span>${disc}</span>
+                                    <span class="delete-item" data-tipo="disciplina" data-index="${index}">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                </div>
+                            `;
+                        });
+                        listaDisciplinasAdmin.innerHTML = html;
+                        listaDisciplinasAdmin.querySelectorAll('.delete-item').forEach(el => {
+                            el.addEventListener('click', function() {
+                                const tipo = this.dataset.tipo;
+                                const index = parseInt(this.dataset.index);
+                                if (tipo === 'categoria') {
+                                    eliminarCategoria(index);
+                                } else {
+                                    eliminarDisciplina(index);
+                                }
+                            });
+                        });
+                    }
+                }
+            }
+
+            // ============================================================
+            // 12. ELIMINAR CATEGORÍA / DISCIPLINA
+            // ============================================================
+            async function eliminarCategoria(index) {
+                const nombre = categorias[index];
+                if (!confirm(`¿Eliminar la categoría "${nombre}"?`)) return;
+                try {
+                    const newList = [...categorias];
+                    newList.splice(index, 1);
+                    await db.collection('configuracion').doc('categorias').update({ lista: newList });
+                    mostrarExito('Categoría eliminada: ' + nombre);
+                } catch (error) {
+                    mostrarError('Error al eliminar categoría: ' + error.message);
+                }
+            }
+
+            async function eliminarDisciplina(index) {
+                const nombre = disciplinas[index];
+                if (!confirm(`¿Eliminar la disciplina "${nombre}"?`)) return;
+                try {
+                    const newList = [...disciplinas];
+                    newList.splice(index, 1);
+                    await db.collection('configuracion').doc('disciplinas').update({ lista: newList });
+                    mostrarExito('Disciplina eliminada: ' + nombre);
+                } catch (error) {
+                    mostrarError('Error al eliminar disciplina: ' + error.message);
+                }
+            }
+
+            // ============================================================
+            // 13. RENDER ATLETAS
             // ============================================================
             function getAtletasFiltrados(buscar, zona) {
                 let filtrados = [...atletas];
@@ -1470,7 +1702,7 @@
             }
 
             // ============================================================
-            // 11. RENDER LISTA ADMIN
+            // 14. RENDER LISTA ADMIN
             // ============================================================
             function renderListaAdmin() {
                 if (!listaAdminAtletas) return;
@@ -1516,7 +1748,7 @@
             }
 
             // ============================================================
-            // 12. CRUD CON FIREBASE + CLOUDINARY
+            // 15. CRUD CON FIREBASE + CLOUDINARY
             // ============================================================
             async function registrarAtleta() {
                 const nombre = regNombre.value.trim();
@@ -1645,7 +1877,7 @@
             }
 
             // ============================================================
-            // 13. PREVISUALIZACIÓN DE FOTO
+            // 16. PREVISUALIZACIÓN DE FOTO
             // ============================================================
             regFoto.addEventListener('change', function(e) {
                 const file = this.files[0];
@@ -1664,7 +1896,7 @@
             });
 
             // ============================================================
-            // 14. SELECTORES
+            // 17. SELECTORES
             // ============================================================
             function actualizarSelectores() {
                 regCategoria.innerHTML = '';
@@ -1702,7 +1934,7 @@
             }
 
             // ============================================================
-            // 15. AGREGAR CATEGORÍA / DISCIPLINA
+            // 18. AGREGAR CATEGORÍA / DISCIPLINA
             // ============================================================
             async function agregarCategoria() {
                 const val = inputCategoria.value.trim();
@@ -1735,20 +1967,13 @@
             }
 
             // ============================================================
-            // 16. SLIDER
+            // 19. SLIDER - USA LA VARIABLE SLIDER_IMAGES
             // ============================================================
-            const sliderImages = [
-                'https://via.placeholder.com/1920x1080/0a0a0a/00b4d8?text=OLIMPIADAS+2026+-+Slide+1',
-                'https://via.placeholder.com/1920x1080/0a0a0a/0077b6?text=OLIMPIADAS+2026+-+Slide+2',
-                'https://via.placeholder.com/1920x1080/0a0a0a/00b4d8?text=OLIMPIADAS+2026+-+Slide+3',
-                'https://via.placeholder.com/1920x1080/0a0a0a/0077b6?text=OLIMPIADAS+2026+-+Slide+4',
-                'https://via.placeholder.com/1920x1080/0a0a0a/00b4d8?text=OLIMPIADAS+2026+-+Slide+5'
-            ];
             let sliderIndex = 0;
 
             function initSlider() {
                 sliderTrack.innerHTML = '';
-                sliderImages.forEach((url) => {
+                SLIDER_IMAGES.forEach((url) => {
                     const img = document.createElement('img');
                     img.src = url;
                     img.alt = 'OLIMPIADAS 2026';
@@ -1757,7 +1982,7 @@
                 });
 
                 sliderDots.innerHTML = '';
-                sliderImages.forEach((_, i) => {
+                SLIDER_IMAGES.forEach((_, i) => {
                     const span = document.createElement('span');
                     span.dataset.index = i;
                     if (i === 0) span.classList.add('active');
@@ -1768,7 +1993,7 @@
             }
 
             function goToSlide(index) {
-                const total = sliderImages.length;
+                const total = SLIDER_IMAGES.length;
                 if (index < 0) index = total - 1;
                 if (index >= total) index = 0;
                 sliderIndex = index;
@@ -1782,7 +2007,7 @@
             function prevSlide() { goToSlide(sliderIndex - 1); }
 
             // ============================================================
-            // 17. NAVEGACIÓN
+            // 20. NAVEGACIÓN
             // ============================================================
             function navigateTo(page) {
                 Object.keys(pages).forEach(key => {
@@ -1804,7 +2029,7 @@
             }
 
             // ============================================================
-            // 18. AUTENTICACIÓN
+            // 21. AUTENTICACIÓN
             // ============================================================
             async function loginAdmin() {
                 const email = adminEmail.value.trim();
@@ -1869,7 +2094,7 @@
             }
 
             // ============================================================
-            // 19. DESCARGAS
+            // 22. DESCARGAS
             // ============================================================
             function getAtletasParaDescarga() {
                 const zona = zonaDescarga.value;
@@ -1932,7 +2157,7 @@
             }
 
             // ============================================================
-            // 20. MÚSICA
+            // 23. MÚSICA
             // ============================================================
             let audio = null;
             let musicPlaying = false;
@@ -1959,7 +2184,7 @@
             }
 
             // ============================================================
-            // 21. EVENTOS E INICIO
+            // 24. EVENTOS E INICIO
             // ============================================================
 
             initSlider();
@@ -2029,8 +2254,11 @@
             }, { once: true });
 
             console.log('🚀 Aplicación iniciada con diseño profesional');
-            console.log('🔥 Usando icono de llama en lugar de copa');
+            console.log('🔥 Usando icono de llama');
             console.log('📸 Cloudinary configurado correctamente');
+            console.log('📸 Slider con ' + SLIDER_IMAGES.length + ' imágenes');
+            console.log('🎬 Video: ' + VIDEO_URL);
+            console.log('🎵 Música: ' + MUSIC_URL);
             actualizarSelectores();
 
             auth.onAuthStateChanged((user) => {
